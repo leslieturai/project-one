@@ -6,6 +6,8 @@ const sqlite3 = require("sqlite3")
 const path = require('path')
 const fs = require('fs')
 
+app.use(express.static(path.join(__dirname, "Photos")))
+
 var records = []
 
 function Record (path, year, month, day, name, season, country, city, weather) {
@@ -141,6 +143,16 @@ app.get("/home", (req, res) => {
         console.log("Row: " + row)
 
     
+})
+
+app.get("/image", (req, res) => {
+        let row = db.all(`SELECT * FROM Photos LIMIT 1`, (err, rows) => {
+        if (err) return console.log(err)
+        console.log(rows[0])
+        res.sendFile(path.join((__dirname, "/WebDevProjects/project-one/server/Photos/2026/April/29/" + rows[0].Name)), (err) => {
+            if (err) return console.log(err)
+        })
+        })
 })
 
 app.listen(5000, () => {

@@ -27,22 +27,23 @@ function App() {
 
   
   useEffect(() => {
-    fetch("/home").then(
-      res => res.json()
-    ).then(
-      data => {setData(data)}
-      
-    )
+    fetch("/image").then(
+      res => res.blob()
+    ).then((blob) => {
+      const url = window.URL.createObjectURL(blob)
+      setData(url)
+    })
+
+
   }, [])
 
   return (
     <div>
-      { photoData ?  JSON.stringify(photoData) : <p>Loading...</p> }
+      { photoData == null ? <p>Loading...</p>  : <img src={photoData}></img> }
       <br></br>
-      { photoData ?  JSON.stringify(photoData.Path) : <p>Loading...</p> }
-    <img height={500} width={500} src={ photoData ? process.env.PUBLIC_URL + "/" + photoData.Path + "/" + photoData.Name : "" }>
+{/*     <img height={500} width={500} src={ photoData ? process.env.PUBLIC_URL + "/" + photoData.Path + "/" + photoData.Name : "" }>
     
-    </img>
+    </img> */}
     </div>
   );
 }
