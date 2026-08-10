@@ -30,7 +30,7 @@ function App() {
     fetch("/image").then(
       res => res.blob()
     ).then((blob) => {
-      const url = window.URL.createObjectURL(blob)
+      const url = URL.createObjectURL(blob)
       setData(url)
     })
 
