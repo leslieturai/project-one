@@ -37,6 +37,10 @@ function App() {
       fetch("/image").then(
         (res) => res.json()
       ).then((data) => {
+        // Create blobs - I should try just sending the HTML here directly because it already has the path. Also saves the client processing time.
+        data[3].forEach(element => {
+          element.Path = URL.createObjectURL(new Blob([element.Path]))
+        });
         setData(data)
       })
 
@@ -45,11 +49,9 @@ function App() {
 
   return (
     <div>
-      {/* { photoData == null ? <p>Loading...</p>  : <img src={photoData}></img> } */}
+      { photoData == null ? <p>Loading...</p> : <p>{JSON.stringify(photoData)}</p>  }
       <br></br>
-{/*     <img height={500} width={500} src={ photoData ? process.env.PUBLIC_URL + "/" + photoData.Path + "/" + photoData.Name : "" }>
-    
-    </img> */}
+      
     </div>
   );
 }

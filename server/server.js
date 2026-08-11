@@ -5,6 +5,7 @@ const sqlite3 = require("sqlite3")
 
 const path = require('path')
 const fs = require('fs')
+const { blob } = require("stream/consumers")
 
 
 
@@ -181,35 +182,44 @@ app.get("/image", (req, res) => {
             if (err) return console.log(err)
         })
         }) */
+
+        function sendData(data) {
+            res.json(data)
+        }
+
        db.all(
     `SELECT DISTINCT YEAR FROM PHOTOS`,
-    (err, rows) => {
+    (err, years) => {
         let tempData = []
         // Getting the most shallow elements
       if (err) return console.log(err)
-        rows.forEach((row) => tempData.push([row.Year]))
-        console.log(tempData)
+        years.forEach((year) => tempData.push([year.Year]))
+        
         let tempMonths = []
-        for (let i = 0; i < tempData.length; i++) {
-            let tempYear = tempData[i]
-            let query = `SELECT * FROM PHOTOS WHERE YEAR = ` + tempYear +
-            ` GROUP BY Month, Day` 
+
+        
+            
+            let query = `SELECT * FROM PHOTOS WHERE YEAR BETWEEN ` + Math.min(...tempData)  + ` AND ` + Math.max(...tempData) +
+            ` GROUP BY Year, Month, Day` 
             db.all(query, (err, months) => {
                 if (err) return console.log(err)
-                months.forEach((month) => {
-                    if (month.Year == tempData[i][0]) {
-                        tempData[i].push(month)
-                    }
-                })
+
+/*                 months.forEach((month) => {
+                    month.Path = URL.createObjectURL(new Blob([month.Path]))
+                })  */
+
+
+                    //console.log(months)
+                    tempData[tempData.length + 1] = months
+                    res.json(tempData)
+                    return
+                    
+                
                 //console.log(JSON.stringify(tempData))
                // If placed here, it will be called twice and throw an HTTP error
-               res.json(
-                tempData
-            )
+               sendData(tempData)
             })
-            
-        }   
-         
+        
         
     }
 )
