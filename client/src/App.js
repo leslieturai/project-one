@@ -27,19 +27,25 @@ function App() {
 
   
   useEffect(() => {
-    fetch("/image").then(
+   /*  fetch("/image").then(
       res => res.blob()
     ).then((blob) => {
       const url = URL.createObjectURL(blob)
       setData(url)
-    })
+    }) */
+
+      fetch("/image").then(
+        (res) => res.json()
+      ).then((data) => {
+        setData(data)
+      })
 
 
   }, [])
 
   return (
     <div>
-      { photoData == null ? <p>Loading...</p>  : <img src={photoData}></img> }
+      {/* { photoData == null ? <p>Loading...</p>  : <img src={photoData}></img> } */}
       <br></br>
 {/*     <img height={500} width={500} src={ photoData ? process.env.PUBLIC_URL + "/" + photoData.Path + "/" + photoData.Name : "" }>
     
