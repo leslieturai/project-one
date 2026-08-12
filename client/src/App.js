@@ -58,11 +58,30 @@ function App() {
     <div>
       {/* <img height={600} width={500} src={"http://localhost:3000/image:2"}></img> */}
       {
-        photoData[3] !== undefined ? 
-          photoData[3].map(
-            (row, i) => <YearSlice key={i} props={photoData[3][i]}></YearSlice>
-          )
-        
+        photoData[0] !== undefined ? 
+            (
+              photoData[0].map((year, i) => {
+                return (
+                  <>
+                    <p key={i}>{year}</p>
+                    {
+                      photoData[2] !== undefined ? 
+                        photoData[2].map((row, j) => {
+                          if (row.Year == year) {
+                            return <YearSlice key={j} props={row}></YearSlice>
+                          } else {
+                            return <></>
+                          }
+                        })
+                      : <p>Loading...</p>
+                    }
+                  </>
+                )
+              })
+              
+            
+            )
+            
         : <p>Loading...</p>
       }
     </div>

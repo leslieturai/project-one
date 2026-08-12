@@ -4,7 +4,7 @@
 export default function YearSlice (props) {
     return (
         <div>
-           <p>{props ? props.props.Name : "Loading..."}</p>
+           <img loading="lazy" width={500} height={500} src={"http://localhost:3000/image:" + props.props.Id}></img>
         </div>
     )
 }

@@ -191,16 +191,16 @@ app.get("/dashboard", (req, res) => {
        db.all(
     `SELECT DISTINCT YEAR FROM PHOTOS`,
     (err, years) => {
-        let tempData = []
+        let tempData = [[]]
         // Getting the most shallow elements
       if (err) return console.log(err)
-        years.forEach((year) => tempData.push([year.Year]))
+        years.forEach((year) => tempData[0].push(year.Year))
         
         let tempMonths = []
 
         
             
-            let query = `SELECT * FROM PHOTOS WHERE YEAR BETWEEN ` + Math.min(...tempData)  + ` AND ` + Math.max(...tempData) +
+            let query = `SELECT * FROM PHOTOS WHERE YEAR BETWEEN ` + Math.min(...tempData[0])  + ` AND ` + Math.max(...tempData[0]) +
             ` GROUP BY Year, Month, Day` 
             db.all(query, (err, months) => {
                 if (err) return console.log(err)
