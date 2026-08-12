@@ -14,9 +14,24 @@ code {
 
 body {
   background-color: rgb(0, 0, 0);
+  overflow-x: hidden;
 }
 
 p, h1, h2 {
   color: white;
 }
 
+div#root > div > img {
+  margin: 0.5% 0.5% 0.5% 0.5%;
+  transition: all 0.3s, height 0.3s;
+  
+}
+
+div#root > div > img:hover {
+  transform: scale(1.2);
+
+}
+
+div#root > div > img:active {
+  transform: scale(5);
+}
