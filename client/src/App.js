@@ -63,7 +63,7 @@ function App() {
               photoData[0].map((year, i) => {
                 return (
                   <>
-                    <p key={i}>{year}</p>
+                    <h2 key={i}>{year}</h2>
                     {
                       photoData[2] !== undefined ? 
                         photoData[2].map((row, j) => {

@@ -123,10 +123,10 @@ const db = new sqlite3.Database("./Archive.db", (err) => {
                         })
                     })
                 }
-                db.close((err) => {
+               /*  db.close((err) => {
                     if (err) return console.log(err)
                     console.log("Connection closed!")
-                })
+                }) */
             }
         )
     }) 
