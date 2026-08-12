@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import YearSlice from "./components/YearSlice/YearSlice";
 
 
 
 function App() {
 
   const [photoData, setData] = useState({})
+  const [testImage, setImage] = useState()
 
 /*   useEffect(() => {
     fetch("/api").then(
@@ -34,24 +36,35 @@ function App() {
       setData(url)
     }) */
 
-      fetch("/image").then(
+      fetch("/dashboard").then(
         (res) => res.json()
       ).then((data) => {
-        // Create blobs - I should try just sending the HTML here directly because it already has the path. Also saves the client processing time.
-        data[3].forEach(element => {
-          element.Path = URL.createObjectURL(new Blob([element.Path]))
-        });
         setData(data)
       })
 
 
   }, [])
 
+/*   useEffect(() => {
+    fetch("/image:2").then(
+      res => res.blob()
+    ).then((blob) => {
+      const url = URL.createObjectURL(blob)
+      setImage(url)
+    })
+  }, []) */
+
   return (
     <div>
-      { photoData == null ? <p>Loading...</p> : <p>{JSON.stringify(photoData)}</p>  }
-      <br></br>
-      
+      {/* <img height={600} width={500} src={"http://localhost:3000/image:2"}></img> */}
+      {
+        photoData[3] !== undefined ? 
+          photoData[3].map(
+            (row, i) => <YearSlice key={i} props={photoData[3][i]}></YearSlice>
+          )
+        
+        : <p>Loading...</p>
+      }
     </div>
   );
 }

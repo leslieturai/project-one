@@ -13,6 +13,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "canvas": "^3.2.3",
     "express": "^5.2.1",
     "sqlite3": "^6.0.1"
   },

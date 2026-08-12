@@ -9,6 +9,7 @@ const { blob } = require("stream/consumers")
 
 
 
+
 app.use(express.static(path.join(__dirname, "Photos")))
 
 var records = []
@@ -174,7 +175,7 @@ app.get("/home", (req, res) => {
     
 })
 
-app.get("/image", (req, res) => {
+app.get("/dashboard", (req, res) => {
        /*  let row = db.all(`SELECT * FROM Photos LIMIT 1`, (err, rows) => {
         if (err) return console.log(err)
         console.log(rows[0])
@@ -204,10 +205,6 @@ app.get("/image", (req, res) => {
             db.all(query, (err, months) => {
                 if (err) return console.log(err)
 
-/*                 months.forEach((month) => {
-                    month.Path = URL.createObjectURL(new Blob([month.Path]))
-                })  */
-
 
                     //console.log(months)
                     tempData[tempData.length + 1] = months
@@ -223,6 +220,17 @@ app.get("/image", (req, res) => {
         
     }
 )
+
+app.get("/image:id", (req, res) => {
+    //console.log(req.params.name.split(":")[1])
+    let row = db.all(`SELECT * FROM Photos WHERE Id = ` + req.params.id.split(":")[1], (err, rows) => {
+        if (err) return console.log(err)
+        //console.log(rows[0])
+        res.sendFile(path.join((__dirname, "/WebDevProjects/project-one/server/" + rows[0].Path + "/" + rows[0].Name)), (err) => {
+            if (err) return console.log(err)
+        })
+    })
+})
 
 
 })
