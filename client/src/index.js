@@ -4,10 +4,19 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import {BrowserRouter as Router } from 'react-router-dom'
+import { Route, Routes, BrowserRouter, useParams } from 'react-router-dom';
+import FullscreenImage from './components/FullscreenImage/FullScreenImage';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+       <Routes>
+         <Route path="/" element={<App />}></Route>
+        <Route path="/fullscreen/:id" element={<FullscreenImage/>}></Route>
+       </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
