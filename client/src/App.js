@@ -73,11 +73,11 @@ function App() {
 
         //console.log(photoData[2][activeURL[1] + 1].Id)
        //handleURLUpdate ("http://localhost:3000/image:" + photoData[2][activeURL[1] + 1].Id , activeURL[1] + 1)
-        setIndex(activeIndex => Number(activeIndex + 1))
+        setIndex(activeIndex + 1)
       }
 
       const decrementState = () => {
-        setIndex(activeIndex => Number(activeIndex - 1))
+        setIndex(activeIndex - 1)
       }
 
       document.addEventListener("keydown", function (event) {
@@ -90,7 +90,7 @@ function App() {
       })
      
       
-  }, [photoData])
+  }, [activeIndex])
 
 /*   useEffect(() => {
     fetch("/image:2").then(
