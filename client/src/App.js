@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { act, useEffect, useState } from "react";
 import YearSlice from "./components/YearSlice/YearSlice";
 
 
@@ -6,7 +6,19 @@ import YearSlice from "./components/YearSlice/YearSlice";
 function App() {
 
   const [photoData, setData] = useState({})
-  const [testImage, setImage] = useState()
+  //const [activeURL, setURL] = useState([])
+
+  const [activeIndex, setIndex] = useState()
+
+/*   const handleURLUpdate = (newURL, newIndex) => {
+    setURL([newURL, newIndex])
+  } */
+
+    const updateActiveImg = (newIndex) => {
+      setIndex(newIndex)
+    }
+
+
 
 /*   useEffect(() => {
     fetch("/api").then(
@@ -40,10 +52,38 @@ function App() {
         (res) => res.json()
       ).then((data) => {
         setData(data)
+        
       })
 
 
   }, [])
+
+    useEffect(() => {
+      if (photoData == null || photoData[2] == undefined || photoData == {} || photoData[2][0].Id == undefined) {
+        console.log("Nothing here")
+        return
+      } /* else if (activeURL[1] == undefined) {
+        console.log("No elId here yet")
+        return
+      } */
+
+
+
+      const handleEvent = () => {
+
+        //console.log(photoData[2][activeURL[1] + 1].Id)
+       //handleURLUpdate ("http://localhost:3000/image:" + photoData[2][activeURL[1] + 1].Id , activeURL[1] + 1)
+
+      }
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key == "e") {
+          handleEvent()
+        }
+      })
+     
+      return () => document.removeEventListener("keydown", handleEvent)
+  }, [photoData])
 
 /*   useEffect(() => {
     fetch("/image:2").then(
@@ -56,6 +96,12 @@ function App() {
 
   return (
     <div>
+{/*       <p>
+        {
+          activeURL == [] ? "Loading..." :
+          JSON.stringify(photoData[2][activeURL[1]].Id)
+        }
+      </p> */}
       {/* <img height={600} width={500} src={"http://localhost:3000/image:2"}></img> */}
       {
         photoData[0] !== undefined ? 
@@ -68,7 +114,11 @@ function App() {
                       photoData[2] !== undefined ? 
                         photoData[2].map((row, j) => {
                           if (row.Year == year) {
-                            return <YearSlice key={j} props={row}></YearSlice>
+                            return <YearSlice key={j} props={row} 
+                              updateFunction={updateActiveImg}
+                              elIndex={j}
+                              currIndex={activeIndex}
+                            ></YearSlice>
                           } else {
                             return <></>
                           }

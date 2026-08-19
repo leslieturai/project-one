@@ -1,15 +1,9 @@
-import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 
 
 export default function FullscreenImage () {
 
     const imageId = useParams()
-    const [test, setTest] = useState()
-
-
-
-    
 
     return (
         <>

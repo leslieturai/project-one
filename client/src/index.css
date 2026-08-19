@@ -15,11 +15,22 @@ code {
 body {
   background-color: rgb(0, 0, 0);
   overflow-x: hidden;
+
+    scroll-snap-type: y mandatory;
 }
 
 p, h1, h2 {
   color: white;
 }
+
+
+
+#fullscreen-div > img {
+  width: 50vw !important;
+  height: 50vh !important;
+}
+
+
 
 div#root > div > img {
   margin: 0.5% 0.5% 0.5% 0.5%;
@@ -27,11 +38,24 @@ div#root > div > img {
   
 }
 
-div#root > div > img:hover {
+div#root > div > img:not(.fullscreen):hover {
   transform: scale(1.2);
 
 }
 
-div#root > div > img:active {
+/* div#root > div > img:active {
   transform: scale(5);
+}
+
+*/
+
+img.fullscreen {
+position: fixed;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+
+width: 80vh;
+height: 80vh;
+
 }
