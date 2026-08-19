@@ -69,20 +69,27 @@ function App() {
 
 
 
-      const handleEvent = () => {
+      const incrementState = () => {
 
         //console.log(photoData[2][activeURL[1] + 1].Id)
        //handleURLUpdate ("http://localhost:3000/image:" + photoData[2][activeURL[1] + 1].Id , activeURL[1] + 1)
+        setIndex(activeIndex => Number(activeIndex + 1))
+      }
 
+      const decrementState = () => {
+        setIndex(activeIndex => Number(activeIndex - 1))
       }
 
       document.addEventListener("keydown", function (event) {
         if (event.key == "e") {
-          handleEvent()
+          incrementState()
+        } 
+        if (event.key == "q") {
+          decrementState()
         }
       })
      
-      return () => document.removeEventListener("keydown", handleEvent)
+      
   }, [photoData])
 
 /*   useEffect(() => {

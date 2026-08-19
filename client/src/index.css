@@ -43,11 +43,16 @@ div#root > div > img:not(.fullscreen):hover {
 
 }
 
+body:has(.fullscreen) {
+  overflow-y: hidden;
+}
+
 /* div#root > div > img:active {
   transform: scale(5);
 }
 
 */
+
 
 img.fullscreen {
 position: fixed;
@@ -58,4 +63,9 @@ transform: translate(-50%, -50%);
 width: 80vh;
 height: 80vh;
 
+z-index: 10;
+
+box-shadow: 0 0 5px 400px rgba(199, 199, 199, 0.623);
+
 }
+
