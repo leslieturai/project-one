@@ -56,16 +56,69 @@ body:has(.fullscreen) {
 
 img.fullscreen {
 position: fixed;
-top: 50%;
+top: 40%;
 left: 50%;
 transform: translate(-50%, -50%);
 
-width: 80vh;
-height: 80vh;
+width: 50vh;
+height: 50vh;
 
 z-index: 10;
 
-box-shadow: 0 0 5px 400px rgba(199, 199, 199, 0.623);
+box-shadow: 0 0 5px 800px rgba(199, 199, 199, 0.623);
 
 }
 
+div.img-info-div {
+  background-color: rgba(58, 56, 53, 0.95);
+  width: 40vw;
+  height: 20vh;
+
+  position: fixed;
+  top: 78%;
+  left: 50.5%;
+  transform: translate(-50%, -50%);
+
+  z-index: 11;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+div.img-info-div p {
+  font-size: 1.2rem;
+  opacity: 0.8;
+  font-style: italic;
+  font-weight:400;
+  font-family:monospace;
+  margin-left: 5%;
+}
+
+div.img-info-div p:last-child {
+  margin-top: -10%;
+}
+
+.fullscreen-nav-arrows {
+  position: fixed;
+  top: 38%;
+  left: 50.5%;
+  transform: translate(-50%, -50%);
+  width: 65vh;
+
+  z-index: 15;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  border: 2px solid green;
+
+}
+
+.left-arrow, .right-arrow {
+  font-size: 6rem;
+  cursor:pointer;
+}

@@ -19,6 +19,17 @@ function App() {
     }
 
 
+          const incrementState = () => {
+
+        //console.log(photoData[2][activeURL[1] + 1].Id)
+       //handleURLUpdate ("http://localhost:3000/image:" + photoData[2][activeURL[1] + 1].Id , activeURL[1] + 1)
+        setIndex(activeIndex + 1)
+      }
+
+      const decrementState = () => {
+        setIndex(activeIndex - 1)
+      }
+
 
 /*   useEffect(() => {
     fetch("/api").then(
@@ -69,16 +80,7 @@ function App() {
 
 
 
-      const incrementState = () => {
 
-        //console.log(photoData[2][activeURL[1] + 1].Id)
-       //handleURLUpdate ("http://localhost:3000/image:" + photoData[2][activeURL[1] + 1].Id , activeURL[1] + 1)
-        setIndex(activeIndex + 1)
-      }
-
-      const decrementState = () => {
-        setIndex(activeIndex - 1)
-      }
 
       document.addEventListener("keydown", function (event) {
         if (event.key == "e") {
@@ -103,6 +105,48 @@ function App() {
 
   return (
     <div>
+
+
+
+    {
+      activeIndex == null ? (
+        ""
+      ) :
+      (
+        <>
+           {/* Fullscreen Arrow Navigation Elements */}
+          <div className="fullscreen-nav-arrows">
+              <p className="left-arrow"
+                onClick={() => decrementState()}
+              >&#10094;</p>
+              <p className="right-arrow"
+                onClick={() => incrementState()}
+              >&#10095;</p>
+
+          </div>
+          {/* Photo Information Elements */}
+          <div className="img-info-div">
+            <p>
+              {photoData[2][activeIndex].City ? photoData[2][activeIndex].City : "N/A" }, {photoData[2][activeIndex].Country}
+            </p>
+            <p>
+              {photoData[2][activeIndex].Day ? photoData[2][activeIndex].Day : "N/A"}/
+              {photoData[2][activeIndex].Month ? photoData[2][activeIndex].Month : "N/A"}/
+              {photoData[2][activeIndex].Year ? photoData[2][activeIndex].Year : "N/A"}
+            </p>
+            <p>
+              {photoData[2][activeIndex].Name ? photoData[2][activeIndex].Name : "N/A"}
+            </p>
+            <p>
+              {photoData[2][activeIndex].Season ? photoData[2][activeIndex].Season : "N/A"}
+            </p>
+            <p>
+              {photoData[2][activeIndex].Path? photoData[2][activeIndex].Path : "N/A"}
+            </p>
+          </div>
+        </>
+      )
+    }
 {/*       <p>
         {
           activeURL == [] ? "Loading..." :
