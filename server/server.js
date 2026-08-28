@@ -120,19 +120,7 @@ app.get("/home", (req, res) => {
 
 /* Dashboard request */
 app.get("/dashboard", (req, res) => {
-       /*  let row = db.all(`SELECT * FROM Photos LIMIT 1`, (err, rows) => {
-        if (err) return console.log(err)
-        console.log(rows[0])
-        res.sendFile(path.join((__dirname, "/WebDevProjects/project-one/server/Photos/2026/April/29/" + rows[0].Name)), (err) => {
-            if (err) return console.log(err)
-        })
-        }) */
-
-        function sendData(data) {
-            res.json(data)
-        }
-
-       db.all(
+    db.all(
     `SELECT DISTINCT YEAR FROM PHOTOS`,
     (err, years) => {
         let tempData = [[]]
@@ -156,7 +144,6 @@ app.get("/dashboard", (req, res) => {
 
 /* General image request */
 app.get("/image:id", (req, res) => {
-    //console.log(req.params.name.split(":")[1])
     let row = db.all(`SELECT * FROM Photos WHERE Id = ` + req.params.id.split(":")[1], (err, rows) => {
         if (err) return console.log(err)
         //console.log(rows[0])
@@ -164,6 +151,30 @@ app.get("/image:id", (req, res) => {
             if (err) return console.log(err)
         })
     })
+})
+
+app.get("/time:year", (req, res) => {
+    console.log("here at year")
+    let tempData = [[]]
+    //req.params.year.split(":")[1].split("=")[0]
+    db.all(
+        `SELECT DISTINCT Month FROM Photos WHERE Year = ` + req.params.year.split(":")[1].split("=")[0], (err, months) => {
+            if (err) return console.log(err)
+            //console.log(months)
+            months.forEach (month => tempData[0].push(month.Month))
+            console.log(tempData)
+            db.all(
+                `SELECT * FROM Photos WHERE Year = ` + req.params.year.split(":")[1].split("=")[0], (err, days) => {
+                    if (err) return console.log(err)
+                    tempData[tempData.length + 1] = days
+                    console.log(tempData)
+                    res.json(tempData)
+                }
+            )
+
+        }
+    )
+
 })
 
 app.listen(5000, () => {

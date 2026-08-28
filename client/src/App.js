@@ -5,7 +5,9 @@ function App() {
 
   const [photoData, setData] = useState({})
 
-  const [activeIndex, setIndex] = useState()
+  const [activeIndex, setIndex] = useState(null)
+
+  const [timeDepth, setDepth] = useState(0)
 
   const updateActiveImg = (newIndex) => {
     setIndex(newIndex)
@@ -18,13 +20,17 @@ function App() {
   const decrementState = () => {
     setIndex(activeIndex - 1)
   }
+
+
   
   useEffect(() => {
-    fetch("/dashboard").then(
-      (res) => res.json()
-    ).then((data) => {
-      setData(data)
-    })
+        fetch("/dashboard").then(
+          (res) => res.json()
+        ).then((data) => {
+          setData(data)
+        })
+      
+    
   }, [])
 
   useEffect(() => {
@@ -45,7 +51,6 @@ function App() {
     }
   })
 }, [activeIndex])
-
   return (
     <div>
       {
@@ -91,22 +96,49 @@ function App() {
       {
         photoData[0] !== undefined ? 
             (
-              photoData[0].map((year, i) => {
+              photoData[0].map((timeFrame, i) => {
                 return (
                   <>
-                    <h2 key={i}>{year}</h2>
+                    <h2 key={i}
+                      onClick={(event) => {
+                        setDepth(timeDepth + 1)
+                        let queryString = new URLSearchParams(timeFrame).toString()
+                        let fullURL = "/time:" + queryString
+                        fetch(fullURL).then(
+                          (res) => res.json()
+                        ).then((data) => {
+                          setData(data)
+                        })
+                      }}
+                    >{timeFrame}</h2>
                     {
                       photoData[2] !== undefined ? 
                         photoData[2].map((row, j) => {
-                          if (row.Year == year) {
-                            return <YearSlice key={j} props={row} 
-                              updateFunction={updateActiveImg}
-                              elIndex={j}
-                              currIndex={activeIndex}
-                            ></YearSlice>
-                          } else {
-                            return <></>
+                          if (timeDepth === 0) {
+                            if (row.Year == timeFrame) {
+                              return <YearSlice key={j} props={row} 
+                                updateFunction={updateActiveImg}
+                                elIndex={j}
+                                currIndex={activeIndex}
+                              ></YearSlice>
+                            } else {
+                              return <></>
+                            }
                           }
+
+                          if (timeDepth === 1) {
+                            if (row.Month == timeFrame) {
+                              return <YearSlice key={j} props={row} 
+                                updateFunction={updateActiveImg}
+                                elIndex={j}
+                                currIndex={activeIndex}
+                              ></YearSlice>
+                            } else {
+                              return <></>
+                            }
+                          }
+
+                          
                         })
                       : <p>Loading...</p>
                     }
