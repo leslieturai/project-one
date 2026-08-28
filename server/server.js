@@ -5,10 +5,6 @@ const sqlite3 = require("sqlite3")
 
 const path = require('path')
 const fs = require('fs')
-const { blob } = require("stream/consumers")
-
-
-
 
 app.use(express.static(path.join(__dirname, "Photos")))
 
@@ -73,9 +69,6 @@ const db = new sqlite3.Database("./Archive.db", (err) => {
             records.push(tempFile)
         })
 
-        
-    
-
         db.run(
             `CREATE TABLE IF NOT EXISTS Photos (
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -98,19 +91,7 @@ const db = new sqlite3.Database("./Archive.db", (err) => {
                     (Path, Year, Month, Day, Name, Season, Country, City, Weather) 
                     VALUES 
                     (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                
                 `
-    /*             test = [
-                        'Photos\\2026\\April\\29',
-                        '2026',
-                        'April',
-                        '29',
-                        'IMG_6150.JPG',
-                        'Spring',
-                        'Netherlands',
-                        '',
-                        ''
-                    ] */
 
                 for (let i = 0; i < records.length; i++) {
                     db.run(query, Object.values(records[i]), (err) => {
@@ -119,62 +100,25 @@ const db = new sqlite3.Database("./Archive.db", (err) => {
                     db.all(`SELECT * FROM Photos`, (err, rows) => {
                         if (err) return console.log(err)
                         //console.log(rows)
-                        
                         })
                     })
                 }
-               /*  db.close((err) => {
-                    if (err) return console.log(err)
-                    console.log("Connection closed!")
-                }) */
             }
         )
     }) 
-    }
-
-
-
-
-
-
-/* var data = [
-    // Array for each year, sub-array based on month of year
-    [2026, 
-        ["January",
-            /// All January rows
-        ]
-    ]
-] */
-
-
-
-
-
-
-
-
-app.get("/api", (req, res) => {
-    res.json({"files": [
-        {"2026": ["April", "May"]}
-    ]})
-})
+}
 
 app.get("/home", (req, res) => {
-
     let row = db.all(`SELECT * FROM Photos LIMIT 1`, (err, rows) => {
         if (err) return console.log(err)
-        //console.log(rows[0])
-        res.json(
-        
-            rows[0]
-        
-    )
+            res.json(
+                rows[0]
+            )
         })
         console.log("Row: " + row)
-
-    
 })
 
+/* Dashboard request */
 app.get("/dashboard", (req, res) => {
        /*  let row = db.all(`SELECT * FROM Photos LIMIT 1`, (err, rows) => {
         if (err) return console.log(err)
@@ -194,33 +138,23 @@ app.get("/dashboard", (req, res) => {
         let tempData = [[]]
         // Getting the most shallow elements
       if (err) return console.log(err)
-        years.forEach((year) => tempData[0].push(year.Year))
-        
-        let tempMonths = []
-
-        
+        years.forEach((year) => tempData[0].push(year.Year))      
             
             let query = `SELECT * FROM PHOTOS WHERE YEAR BETWEEN ` + Math.min(...tempData[0])  + ` AND ` + Math.max(...tempData[0]) +
             ` GROUP BY Year, Month, Day` 
             db.all(query, (err, months) => {
                 if (err) return console.log(err)
-
-
-                    //console.log(months)
                     tempData[tempData.length + 1] = months
                     res.json(tempData)
                     return
-                    
-                
-                //console.log(JSON.stringify(tempData))
-               // If placed here, it will be called twice and throw an HTTP error
-               sendData(tempData)
-            })
-        
-        
-    }
-)
 
+            })
+        }
+    )
+})
+
+
+/* General image request */
 app.get("/image:id", (req, res) => {
     //console.log(req.params.name.split(":")[1])
     let row = db.all(`SELECT * FROM Photos WHERE Id = ` + req.params.id.split(":")[1], (err, rows) => {
@@ -232,10 +166,6 @@ app.get("/image:id", (req, res) => {
     })
 })
 
-
-})
-
 app.listen(5000, () => {
     console.log("Server started on port 5000!")
 })
-
