@@ -51,8 +51,11 @@ function App() {
     }
   })
 }, [activeIndex])
+
   return (
     <div>
+      {timeDepth === 1 ? <h2 onClick={() => decrementState()}>{photoData[2][0].Year}</h2> : ""}
+      {timeDepth === 2 ? <h2 onClick={() => decrementState()}>{photoData[2][0].Year + " > " + photoData[2][0].Month}</h2> : ""}
       {
         activeIndex == null ? (
           ""
@@ -70,6 +73,7 @@ function App() {
 
             </div>
             {/* Photo Information Elements */}
+            
             <div className="img-info-div">
               <p>
                 {photoData[2][activeIndex].City ? photoData[2][activeIndex].City : "N/A" }, {photoData[2][activeIndex].Country}
@@ -95,11 +99,17 @@ function App() {
       {/* Main render for gallery  */}
       {
         photoData[0] !== undefined ? 
+        
             (
               photoData[0].map((timeFrame, i) => {
                 return (
+                  
+                  
                   <>
-                    <h2 key={i}
+                                          
+                    {
+                      timeDepth < 1 ?
+                        <h2 key={i}
                       onClick={(event) => {
                         setDepth(timeDepth + 1)
                         let queryString = new URLSearchParams(timeFrame).toString()
@@ -110,7 +120,21 @@ function App() {
                           setData(data)
                         })
                       }}
+                    >{timeFrame}</h2> :
+                      <h2 key={i}
+                      onClick={(event) => {
+                        setDepth(timeDepth + 1)
+                        let queryString = new URLSearchParams(timeFrame).toString()
+                        let fullURL = "/month:" + queryString + "/:" + photoData[2][0].Year
+                        fetch(fullURL).then(
+                          (res) => res.json()
+                        ).then((data) => {
+                          setData(data)
+                        })
+                      }}
                     >{timeFrame}</h2>
+                    }
+
                     {
                       photoData[2] !== undefined ? 
                         photoData[2].map((row, j) => {
@@ -128,6 +152,18 @@ function App() {
 
                           if (timeDepth === 1) {
                             if (row.Month == timeFrame) {
+                              return <YearSlice key={j} props={row} 
+                                updateFunction={updateActiveImg}
+                                elIndex={j}
+                                currIndex={activeIndex}
+                              ></YearSlice>
+                            } else {
+                              return <></>
+                            }
+                          }
+
+                          if (timeDepth === 2) {
+                            if (row.Day == timeFrame) {
                               return <YearSlice key={j} props={row} 
                                 updateFunction={updateActiveImg}
                                 elIndex={j}

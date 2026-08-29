@@ -153,6 +153,7 @@ app.get("/image:id", (req, res) => {
     })
 })
 
+/* Monthly view in a year */
 app.get("/time:year", (req, res) => {
     console.log("here at year")
     let tempData = [[]]
@@ -162,12 +163,12 @@ app.get("/time:year", (req, res) => {
             if (err) return console.log(err)
             //console.log(months)
             months.forEach (month => tempData[0].push(month.Month))
-            console.log(tempData)
+            //console.log(tempData)
             db.all(
                 `SELECT * FROM Photos WHERE Year = ` + req.params.year.split(":")[1].split("=")[0], (err, days) => {
                     if (err) return console.log(err)
                     tempData[tempData.length + 1] = days
-                    console.log(tempData)
+                    //console.log(tempData)
                     res.json(tempData)
                 }
             )
@@ -176,6 +177,40 @@ app.get("/time:year", (req, res) => {
     )
 
 })
+
+/* Daily view of a monthy */
+app.get("/month:day/:year", (req, res) => {
+    console.log("here at day!")
+    console.log(req.params)
+    let tempData = [[]]
+    db.all(
+        `SELECT DISTINCT Day FROM Photos WHERE Month = ` + JSON.stringify(req.params.day.split(":")[1].split("=")[0]) + 
+        ` AND Year = ` + JSON.stringify(req.params.year.split(":")[1]), 
+        (err, days) => {
+            if (err) return console.log(err)
+            days.forEach (day => tempData[0].push(day.Day))
+
+            db.all(
+                `SELECT * FROM Photos WHERE Month = ` + JSON.stringify(req.params.day.split(":")[1].split("=")[0]) + 
+                ` AND Year = ` + JSON.stringify(req.params.year.split(":")[1]), 
+                (err, rows) => {
+                    if (err) return console.log(err)
+                    
+                    tempData[tempData.length + 1] = rows
+                    console.log("here, sending...")
+                    res.json(tempData)
+                }
+            )
+        }
+    )
+
+
+
+    
+})
+
+
+
 
 app.listen(5000, () => {
     console.log("Server started on port 5000!")
