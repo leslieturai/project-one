@@ -54,8 +54,25 @@ function App() {
 
   return (
     <div>
-      {timeDepth === 1 ? <h2 onClick={() => decrementState()}>{photoData[2][0].Year}</h2> : ""}
-      {timeDepth === 2 ? <h2 onClick={() => decrementState()}>{photoData[2][0].Year + " > " + photoData[2][0].Month}</h2> : ""}
+      {timeDepth === 1 ? <h2 onClick={() => {
+         setDepth(0)
+          let fullURL = "/dashboard"
+          fetch(fullURL).then(
+            (res) => res.json()
+          ).then((data) => {
+            setData(data)
+          })
+      }}>{photoData[2][0].Year}</h2> : ""}
+      {timeDepth === 2 ? <h2 onClick={() => {
+          setDepth(1)
+          let queryString = new URLSearchParams(photoData[2][0].Year).toString()
+          let fullURL = "/time:" + queryString
+          fetch(fullURL).then(
+            (res) => res.json()
+          ).then((data) => {
+            setData(data)
+          })
+        }}>{photoData[2][0].Year + " > " + photoData[2][0].Month}</h2> : ""}
       {
         activeIndex == null ? (
           ""
@@ -65,7 +82,7 @@ function App() {
             {/* Fullscreen Arrow Navigation Elements */}
             <div className="fullscreen-nav-arrows">
                 <p className="left-arrow"
-                  onClick={() => decrementState()}
+                  onClick={(e) => {decrementState()}}
                 >&#10094;</p>
                 <p className="right-arrow"
                   onClick={() => incrementState()}
