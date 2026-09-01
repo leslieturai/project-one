@@ -71,13 +71,57 @@ header > div > div.tag-div-group {
 
 header > .header-lesser-text {
   cursor: pointer;
-  opacity: 0.5;
+  opacity: 0.4;
   transition: all;
   transition-duration: 0.2s;
 }
 
 header > .header-lesser-text:hover {
   opacity: 1;
+}
+
+/* TagList */
+.tag-list-div {
+  border: 0.2rem dashed white;
+
+  width: 50vw;
+  height: 40vh;
+
+  position: absolute;
+  z-index: 13;
+
+  margin-left: 20vw;
+  margin-top: 10vh;
+}
+
+/* Settings */
+
+.settings-div {
+  border: 0.2rem dashed white;
+
+  width: 50vw;
+  height: 40vh;
+
+  position: absolute;
+  z-index: 13;
+
+  margin-left: 20vw;
+  margin-top: 10vh;
+}
+
+/* Utilities */
+
+.utilities-div {
+    border: 0.2rem dashed white;
+
+  width: 50vw;
+  height: 40vh;
+
+  position: absolute;
+  z-index: 13;
+
+  margin-left: 20vw;
+  margin-top: 10vh;
 }
 
 

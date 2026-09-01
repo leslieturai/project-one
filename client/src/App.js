@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import YearSlice from "./components/YearSlice/YearSlice";
+import TagList from "./components/TagList/TagList";
+import Settings from "./components/Settings/Settings";
+import Utilities from "./components/Utilities/Utilities";
 
 function App() {
 
   const [photoData, setData] = useState({})
 
   const [activeIndex, setIndex] = useState(null)
+
+  const [menuOpen, setMenu] = useState(null)
 
   const [timeDepth, setDepth] = useState(0)
 
@@ -52,21 +57,44 @@ function App() {
   })
 }, [activeIndex])
 
+
+
+
   return (
     <div>
       {/* Header */}
       <header>
           <h1>Archive</h1>
-          <p className="header-lesser-text">Tag list</p>
-          <p className="header-lesser-text">Settings</p>
-          <p className="header-lesser-text">Utilities</p>
+          <p className="header-lesser-text" onClick={() => {
+            if (menuOpen === 1) {
+              setMenu(0)
+              return
+            }
+            setMenu(1)
+          }}>Tag list</p>
+          <p className="header-lesser-text" onClick={() => {
+            if (menuOpen === 2) {
+              setMenu(0)
+              return
+            }
+            setMenu(2)
+          }}>Settings</p>
+          <p className="header-lesser-text" onClick={() => {
+            if (menuOpen === 3) {
+              setMenu(0)
+              return
+            }
+            setMenu(3)
+          }}>Utilities</p>
           <div>
-              <input type="text"/>
+              <input type="text" placeholder="Search for tag..."/>
               <div className="tag-div-group">
                   <p>Tags here</p>
               </div>
           </div>
       </header>
+
+
 
       {timeDepth === 1 ? <h2 onClick={() => {
          setDepth(0)
@@ -129,14 +157,42 @@ function App() {
       }
       {/* Main render for gallery  */}
       {
+        menuOpen === 1 ? (
+          <TagList/>
+        ) :
+        (
+          <></>
+        )
+      }
+
+            {
+        menuOpen === 2 ? (
+          <Settings/>
+        ) :
+        (
+          <></>
+        )
+      }
+
+            {
+        menuOpen === 3 ? (
+          <Utilities/>
+        ) :
+        (
+          <></>
+        )
+      }
+      
+      {
         photoData[0] !== undefined ? 
         
-            (
+            ( 
               photoData[0].map((timeFrame, i) => {
                 return (
                   
                   
                   <>
+                  
                                           
                     {
                       timeDepth < 1 ?
