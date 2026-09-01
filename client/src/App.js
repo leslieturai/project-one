@@ -87,7 +87,7 @@ function App() {
             setMenu(3)
           }}>Utilities</p>
           <div>
-              <input type="text" placeholder="Search for tag..."/>
+              <input type="text" placeholder="Query with tags..."/>
               <div className="tag-div-group">
                   <p>Tags here</p>
               </div>
