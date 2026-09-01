@@ -82,7 +82,9 @@ header > .header-lesser-text:hover {
 
 /* TagList */
 .tag-list-div {
+  padding: 0.5rem;
   border: 0.2rem dashed white;
+  background-color: black;
 
   width: 50vw;
   height: 40vh;
@@ -92,6 +94,12 @@ header > .header-lesser-text:hover {
 
   margin-left: 20vw;
   margin-top: 10vh;
+
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 /* Settings */
