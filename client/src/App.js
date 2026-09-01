@@ -54,6 +54,20 @@ function App() {
 
   return (
     <div>
+      {/* Header */}
+      <header>
+          <h1>Archive</h1>
+          <p className="header-lesser-text">Tag list</p>
+          <p className="header-lesser-text">Settings</p>
+          <p className="header-lesser-text">Utilities</p>
+          <div>
+              <input type="text"/>
+              <div className="tag-div-group">
+                  <p>Tags here</p>
+              </div>
+          </div>
+      </header>
+
       {timeDepth === 1 ? <h2 onClick={() => {
          setDepth(0)
           let fullURL = "/dashboard"
