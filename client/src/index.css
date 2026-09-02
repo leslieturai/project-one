@@ -102,6 +102,18 @@ header > .header-lesser-text:hover {
   gap: 0.5rem;
 }
 
+.tag-list-div p {
+  cursor: pointer;
+
+  padding: 0.5rem;
+  
+}
+
+.tag-list-div p.active {
+    border: 0.15rem solid white;
+    border-radius: 2rem;
+}
+
 /* Settings */
 
 .settings-div {

@@ -10,7 +10,7 @@ app.use(express.static(path.join(__dirname, "Photos")))
 
 var records = []
 
-function Record (path, year, month, day, name, season, country, city, weather) {
+function Record (path, year, month, day, name, season, country, city, weather, tags) {
     this.path = path
     this.year = year,
     this.month = month,
@@ -20,7 +20,22 @@ function Record (path, year, month, day, name, season, country, city, weather) {
     this.country = country,
     this.city = city,
     this.weather = weather
+    this.tags = ""
 }
+
+function returnSeason (monthArg) {
+    let spring = ["March", "April", "May"]
+    let summer = ["June", "July", "August"]
+    let fall = ["September", "October", "November"]
+    let winter = ["December", "January", "February"]
+
+    if (spring.includes(monthArg)) return "Spring"
+    if (summer.includes(monthArg)) return "Summer"
+    if (fall.includes(monthArg)) return "Fall"
+    if (winter.includes(monthArg)) return "Winter"
+}
+
+
 
 function extractDate (pathStr) {
     return [
@@ -44,6 +59,7 @@ const db = new sqlite3.Database("./Archive.db", (err) => {
         fs.existsSync("./Archive.db")
     ) {
         console.log("DB is present")
+
     } else {
         fs.readdir("./Photos", {withFileTypes: true, recursive: true}, (err, files) => {
         
@@ -64,8 +80,13 @@ const db = new sqlite3.Database("./Archive.db", (err) => {
                 "Spring",
                 "Netherlands",
                 "",
+                "",
                 ""
             )
+
+            tempFile.tags = returnSeason(tempFile.month)
+
+
             records.push(tempFile)
         })
 
@@ -80,7 +101,8 @@ const db = new sqlite3.Database("./Archive.db", (err) => {
                     Season TEXT,
                     Country TEXT,
                     City TEXT,
-                    Weather TEXT
+                    Weather TEXT,
+                    Tags TEXT
                 )`, (err) => {
                 if (err) return console.log(err)
                 console.log("Table create successfully!")
@@ -88,9 +110,9 @@ const db = new sqlite3.Database("./Archive.db", (err) => {
                 query = 
                 `
                     INSERT INTO Photos 
-                    (Path, Year, Month, Day, Name, Season, Country, City, Weather) 
+                    (Path, Year, Month, Day, Name, Season, Country, City, Weather, Tags) 
                     VALUES 
-                    (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 `
 
                 for (let i = 0; i < records.length; i++) {

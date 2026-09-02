@@ -14,6 +14,8 @@ function App() {
 
   const [timeDepth, setDepth] = useState(0)
 
+  const [filters, setFilters] = useState(null)
+
   const updateActiveImg = (newIndex) => {
     setIndex(newIndex)
   }
@@ -24,6 +26,10 @@ function App() {
 
   const decrementState = () => {
     setIndex(activeIndex - 1)
+  }
+
+  const handleFilterUpdate = (filterArg) => {
+    setFilters(...[filterArg])
   }
 
 
@@ -87,7 +93,7 @@ function App() {
             setMenu(3)
           }}>Utilities</p>
           <div>
-              <input type="text" placeholder="Query with tags..."/>
+              {/* <input type="text" placeholder="Query with tags..."/> */}
               <div className="tag-div-group">
                   <p>Tags here</p>
               </div>
@@ -157,8 +163,14 @@ function App() {
       }
       {/* Main render for gallery  */}
       {
+        filters !== null && filters !== undefined && filters !== undefined ? 
+        <p className="filter-text">Results for: {filters[0]}</p>
+        : 
+        ""
+      }
+      {
         menuOpen === 1 ? (
-          <TagList/>
+          <TagList updateFunc={handleFilterUpdate}/>
         ) :
         (
           <></>
@@ -192,10 +204,15 @@ function App() {
                   
                   
                   <>
+
+
                   
                                           
                     {
-                      timeDepth < 1 ?
+
+                      
+
+                      timeDepth < 1?
                         <h2 key={i}
                       onClick={(event) => {
                         setDepth(timeDepth + 1)
@@ -225,6 +242,8 @@ function App() {
                     {
                       photoData[2] !== undefined ? 
                         photoData[2].map((row, j) => {
+
+
                           if (timeDepth === 0) {
                             if (row.Year == timeFrame) {
                               return <YearSlice key={j} props={row} 
@@ -239,11 +258,25 @@ function App() {
 
                           if (timeDepth === 1) {
                             if (row.Month == timeFrame) {
-                              return <YearSlice key={j} props={row} 
+                              if (filters !== null) {
+                                if (
+                                  [row.Tags].some(r => filters.includes(r))
+                                ) {
+                                return <YearSlice key={j} props={row} 
                                 updateFunction={updateActiveImg}
                                 elIndex={j}
                                 currIndex={activeIndex}
                               ></YearSlice>
+                                } else {
+                                  return <></>
+                                }
+                              } else {
+                                return <YearSlice key={j} props={row} 
+                                updateFunction={updateActiveImg}
+                                elIndex={j}
+                                currIndex={activeIndex}
+                              ></YearSlice>
+                              }
                             } else {
                               return <></>
                             }

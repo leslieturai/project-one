@@ -1,5 +1,9 @@
 
-export default function TagList () {
+export default function TagList (props) {
+    var updateFilter = props.updateFunc
+
+    
+
     return (
         <div className="tag-list-div">
             <p>Flower</p>
@@ -33,7 +37,7 @@ export default function TagList () {
             <p>Dam</p>
             <p>Spring</p>
             <p>Summer</p>
-            <p>Fall</p>
+            <p onClick={() => props.updateFunc(["Fall"])}>Fall</p>
             <p>Winter</p>
             <p>Sign</p>
             <p>Water</p>
