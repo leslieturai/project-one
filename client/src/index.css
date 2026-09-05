@@ -109,6 +109,25 @@ header > .header-lesser-text:hover {
   
 }
 
+div.tag-list-div + h2.time-heading {
+  color: aqua !important;
+  position: absolute;
+  opacity: 0;
+}
+
+h2.time-heading ~ h2.time-heading {
+  color: red;
+    position: absolute;
+  opacity: 0;
+}
+
+h2.time-heading:has(+ img.image-preview) {
+  color: violet !important;
+    position: relative;
+  opacity: 1;
+}
+
+
 .tag-list-div p.active {
     border: 0.15rem solid white;
     border-radius: 2rem;

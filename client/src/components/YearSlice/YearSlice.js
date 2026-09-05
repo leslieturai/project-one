@@ -14,7 +14,7 @@ export default function YearSlice (props) {
         onClick={(e) => handleClick(e)}
 
         className={
-            props.currIndex == props.elIndex ? "fullscreen" : ""
+            props.currIndex == props.elIndex ? "fullscreen" : "image-preview"
         }
         ></img>
     )
