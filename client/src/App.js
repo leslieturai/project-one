@@ -241,37 +241,6 @@ function App() {
                       }}
                     >{timeFrame}</h2> : ""
                       }
-
-
-                      
-                    
-
-
-{/* /*                       timeDepth < 1 ? 
-                        <h2 className="time-heading" key={i}
-                      onClick={(event) => {
-                        setDepth(timeDepth + 1)
-                        let queryString = new URLSearchParams(timeFrame).toString()
-                        let fullURL = "/time:" + queryString
-                        fetch(fullURL).then(
-                          (res) => res.json()
-                        ).then((data) => {
-                          setData(data)
-                        })
-                      }}
-                    >{timeFrame}</h2> :
-                      <h2 className="time-heading" key={i}
-                      onClick={(event) => {
-                        setDepth(timeDepth + 1)
-                        let queryString = new URLSearchParams(timeFrame).toString()
-                        let fullURL = "/month:" + queryString + "/:" + photoData[2][0].Year
-                        fetch(fullURL).then(
-                          (res) => res.json()
-                        ).then((data) => {
-                          setData(data)
-                        })
-                      }}
-                    >{timeFrame}</h2> */ }
                     
 
                     {
