@@ -29,6 +29,11 @@ function App() {
   }
 
   const handleFilterUpdate = (filterArg) => {
+    if (filters !== null) {
+          if (filters.includes(filterArg)) {
+            console.log("Already here")
+          }
+    }
     setFilters(...[filterArg])
   }
 

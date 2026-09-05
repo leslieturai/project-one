@@ -1,7 +1,15 @@
 
 export default function TagList (props) {
     var updateFilter = props.updateFunc
-
+    
+    const handleClassChange = (ev) => {
+        
+        if (ev.target.className == "active-filter") {
+            ev.target.className = ""
+        } else {
+            ev.target.className = "active-filter"
+        }
+    }
     
 
     return (
@@ -35,10 +43,26 @@ export default function TagList (props) {
             <p>Tree</p>
             <p>Shell</p>
             <p>Dam</p>
-            <p>Spring</p>
-            <p>Summer</p>
-            <p onClick={() => props.updateFunc(["Fall"])}>Fall</p>
-            <p>Winter</p>
+            <p onClick={(e) => {
+                props.updateFunc(["Spring"])
+                handleClassChange(e)
+                }}>Spring</p>
+            <p onClick={(e) => {
+                props.updateFunc(["Summer"])
+                handleClassChange(e)
+            }
+                
+            }>Summer</p>
+            <p onClick={(e) => {
+                props.updateFunc(["Fall"])
+                handleClassChange(e)
+            }
+
+            }>Fall</p>
+            <p onClick={(e) => {
+                props.updateFunc(["Winter"])
+                handleClassChange(e)
+                }}>Winter</p>
             <p>Sign</p>
             <p>Water</p>
             <p>Beach</p>

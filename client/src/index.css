@@ -109,6 +109,11 @@ header > .header-lesser-text:hover {
   
 }
 
+.tag-list-div p.active-filter {
+  border: 0.2rem solid white;
+  border-radius: 1rem;
+}
+
 div.tag-list-div + h2.time-heading {
   color: aqua !important;
   position: absolute;
