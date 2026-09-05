@@ -208,11 +208,23 @@ function App() {
                   
                   <>
 
+                      {/* 
+                        If filtered, only show filtered elements and a header for what's being filtered for (this is done above)
 
-                  
-                                          
-                    {
-                        filters === null || timeDepth < 1 ? (<h2 className="time-heading" key={i}
+                        If there are no filters, show the normal page
+                          If timeDepth === 1, show the monthly view
+                          If timeDepth === 2, show the daily view of a month/year
+
+                        
+                      */}
+
+                        {
+                          /* filters !== null ? <h2>{JSON.stringify(filters)}</h2> : "" */
+                        }
+
+
+                        {
+                          timeDepth < 1 && filters === null ? (<h2 className="time-heading first-check" key={i}
                         onClick={(event) => {
                           setDepth(timeDepth + 1)
                           let queryString = new URLSearchParams(timeFrame).toString()
@@ -223,16 +235,28 @@ function App() {
                             setData(data)
                           })
                         }}
-                      >{timeFrame}</h2>) : "" 
-                      }
-
-
-                      {
-                        timeDepth === 1 && filters !== null ? <h2 className="time-heading" key={i}
+                      >{timeFrame}</h2>) : <h2 className="time-heading here" key={i}
                       onClick={(event) => {
                         setDepth(timeDepth + 1)
                         let queryString = new URLSearchParams(timeFrame).toString()
-                        let fullURL = "/month:" + queryString + "/:" + photoData[2][0].Year
+                        let queryEnd = new URLSearchParams(photoData[2][0].Year)
+                        let fullURL = "/test/:" + queryString + "/:" + queryEnd
+                        fetch(fullURL).then(
+                          (res) => res.json()
+                        ).then((data) => {
+                          setData(data)
+                        })
+                      }}
+                    >{timeFrame}</h2>
+                        }
+
+                        {
+                          timeDepth === 1 && filters !== null ? <h2 className="time-heading here" key={i}
+                      onClick={(event) => {
+                        setDepth(timeDepth + 1)
+                        let queryString = new URLSearchParams(timeFrame).toString()
+                        let queryEnd = new URLSearchParams(photoData[2][0].Year)
+                        let fullURL = "/test/:" + queryString + "/:" + queryEnd
                         fetch(fullURL).then(
                           (res) => res.json()
                         ).then((data) => {
@@ -240,8 +264,7 @@ function App() {
                         })
                       }}
                     >{timeFrame}</h2> : ""
-                      }
-                    
+                        }
 
                     {
                       photoData[2] !== undefined ? 

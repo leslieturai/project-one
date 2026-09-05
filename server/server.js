@@ -142,6 +142,7 @@ app.get("/home", (req, res) => {
 
 /* Dashboard request */
 app.get("/dashboard", (req, res) => {
+    console.log("Getting Dashboard")
     db.all(
     `SELECT DISTINCT YEAR FROM PHOTOS`,
     (err, years) => {
@@ -166,6 +167,7 @@ app.get("/dashboard", (req, res) => {
 
 /* General image request */
 app.get("/image:id", (req, res) => {
+    console.log("Getting images")
     let row = db.all(`SELECT * FROM Photos WHERE Id = ` + req.params.id.split(":")[1], (err, rows) => {
         if (err) return console.log(err)
         //console.log(rows[0])
@@ -177,7 +179,7 @@ app.get("/image:id", (req, res) => {
 
 /* Monthly view in a year */
 app.get("/time:year", (req, res) => {
-    console.log("here at year")
+    console.log("Getting monthly view")
     let tempData = [[]]
     //req.params.year.split(":")[1].split("=")[0]
     db.all(
@@ -201,23 +203,24 @@ app.get("/time:year", (req, res) => {
 })
 
 /* Daily view of a monthy */
-app.get("/month:day/:year", (req, res) => {
+app.get("/test/:month/:year", (req, res) => {
     console.log("here at day!")
     console.log(req.params)
     let tempData = [[]]
+    //console.log(req.params.month.split(":")[1].split("=")[0], req.params.year.split(":")[1].split("=")[0])
     db.all(
-        `SELECT DISTINCT Day FROM Photos WHERE Month = ` + JSON.stringify(req.params.day.split(":")[1].split("=")[0]) + 
-        ` AND Year = ` + JSON.stringify(req.params.year.split(":")[1]), 
+        `SELECT DISTINCT Day FROM Photos WHERE Month = ` + JSON.stringify(req.params.month.split(":")[1].split("=")[0]) + 
+        ` AND Year = ` + JSON.stringify(req.params.year.split(":")[1].split("=")[0]), 
         (err, days) => {
             if (err) return console.log(err)
             days.forEach (day => tempData[0].push(day.Day))
 
             db.all(
-                `SELECT * FROM Photos WHERE Month = ` + JSON.stringify(req.params.day.split(":")[1].split("=")[0]) + 
-                ` AND Year = ` + JSON.stringify(req.params.year.split(":")[1]), 
+                `SELECT * FROM Photos WHERE Month = ` + JSON.stringify(req.params.month.split(":")[1].split("=")[0]) + 
+                ` AND Year = ` + JSON.stringify(req.params.year.split(":")[1].split("=")[0]), 
                 (err, rows) => {
                     if (err) return console.log(err)
-                    
+                    console.log(rows)
                     tempData[tempData.length + 1] = rows
                     console.log("here, sending...")
                     res.json(tempData)
