@@ -221,15 +221,6 @@ function App() {
                   
                   <>
 
-                      {/* 
-                        If filtered, only show filtered elements and a header for what's being filtered for (this is done above)
-
-                        If there are no filters, show the normal page
-                          If timeDepth === 1, show the monthly view
-                          If timeDepth === 2, show the daily view of a month/year
-
-                        
-                      */}
 
                         {
                           /* filters !== null ? <h2>{JSON.stringify(filters)}</h2> : "" */
