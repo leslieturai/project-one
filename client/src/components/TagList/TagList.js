@@ -6,6 +6,7 @@ export default function TagList (props) {
         
         if (ev.target.className == "active-filter") {
             ev.target.className = ""
+            props.updateFunc(null)
         } else {
             ev.target.className = "active-filter"
         }

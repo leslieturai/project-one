@@ -75,28 +75,32 @@ function App() {
     <div>
       {/* Header */}
       <header>
-          <h1>Archive</h1>
+          <h1 style={activeIndex === null ? null : {pointerEvents: "none"}}>Archive</h1>
           <p className="header-lesser-text" onClick={() => {
             if (menuOpen === 1) {
               setMenu(0)
               return
             }
             setMenu(1)
-          }}>Tag list</p>
+          }} style={activeIndex === null ? null : {pointerEvents: "none"}}>Tag list</p>
           <p className="header-lesser-text" onClick={() => {
             if (menuOpen === 2) {
               setMenu(0)
               return
             }
             setMenu(2)
-          }}>Settings</p>
+          }}
+          style={activeIndex === null ? null : {pointerEvents: "none"}}
+          >Settings</p>
           <p className="header-lesser-text" onClick={() => {
             if (menuOpen === 3) {
               setMenu(0)
               return
             }
             setMenu(3)
-          }}>Utilities</p>
+          }}
+          style={activeIndex === null ? null : {pointerEvents: "none"}}
+          >Utilities</p>
           <div>
               {/* <input type="text" placeholder="Query with tags..."/> */}
               <div className="tag-div-group">
@@ -115,7 +119,9 @@ function App() {
           ).then((data) => {
             setData(data)
           })
-      }}>{photoData[2][0].Year}</h2> : ""}
+      }}
+      style={activeIndex === null ? null : {pointerEvents: "none"}}
+      >{photoData[2][0].Year}</h2> : ""}
       {timeDepth === 2 ? <h2 onClick={() => {
           setDepth(1)
           let queryString = new URLSearchParams(photoData[2][0].Year).toString()
@@ -125,7 +131,9 @@ function App() {
           ).then((data) => {
             setData(data)
           })
-        }}>{photoData[2][0].Year + " > " + photoData[2][0].Month}</h2> : ""}
+        }}
+        style={activeIndex === null ? null : {pointerEvents: "none"}}
+        >{photoData[2][0].Year + " > " + photoData[2][0].Month}</h2> : ""}
       {
         activeIndex == null ? (
           ""
@@ -252,6 +260,8 @@ function App() {
                           setData(data)
                         })
                       }}
+
+                      style={activeIndex === null ? null : {pointerEvents: "none"}}
                     >{timeFrame}</h2>
                         }
 
@@ -268,6 +278,8 @@ function App() {
                           setData(data)
                         })
                       }}
+
+                      style={activeIndex === null ? null : {pointerEvents: "none"}}
                     >{timeFrame}</h2> : ""
                         }
 
@@ -328,14 +340,14 @@ function App() {
 
                           
                         })
-                      : <p>Loading...</p>
+                      : <p style={activeIndex === null ? null : {pointerEvents: "none"}}>Loading...</p>
                     }
                   </>
                 )
               })
             )
             
-        : <p>Loading...</p>
+        : <p style={activeIndex === null ? null : {pointerEvents: "none"}}>Loading...</p>
       }
     </div>
   );

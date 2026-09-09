@@ -16,6 +16,8 @@ export default function YearSlice (props) {
         className={
             props.currIndex == props.elIndex ? "fullscreen" : "image-preview"
         }
+
+        style={ props.currIndex !== null || props.currIndex == props.elIndex ? {pointerEvents: "none"}: null  }
         ></img>
     )
 }
