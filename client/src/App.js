@@ -8,7 +8,6 @@ function App() {
 
   const [photoData, setData] = useState({})
 
-  const [activeIndex, setIndex] = useState(null)
 
   const [menuOpen, setMenu] = useState(null)
 
@@ -16,17 +15,6 @@ function App() {
 
   const [filters, setFilters] = useState(null)
 
-  const updateActiveImg = (newIndex) => {
-    setIndex(newIndex)
-  }
-
-  const incrementState = () => {
-    setIndex(activeIndex + 1)
-  }
-
-  const decrementState = () => {
-    setIndex(activeIndex - 1)
-  }
 
   const handleFilterUpdate = (filterArg) => {
     if (filters !== null) {
@@ -38,18 +26,31 @@ function App() {
   }
 
 
+
+
   
   useEffect(() => {
         fetch("/dashboard").then(
           (res) => res.json()
         ).then((data) => {
           setData(data)
+        
         })
       
     
   }, [])
 
-  useEffect(() => {
+/*   useEffect(() => {
+      if (photoData[2] !== null && photoData[2] !== undefined) {
+            console.log(
+              photoData[2].filter((r) => r.Year == "2023").slice(
+                0, 
+                rangeLimit > 10 ? rangeLimit : 10)
+            )
+          }
+  }, [photoData]) */
+
+/*   useEffect(() => {
     if (photoData === null || photoData[2] === undefined || photoData == {} || photoData[2][0].Id === undefined) {
       console.log("Nothing here")
       return
@@ -66,7 +67,7 @@ function App() {
       setIndex(null)
     }
   })
-}, [activeIndex])
+}, []) */
 
 
 
@@ -75,14 +76,14 @@ function App() {
     <div>
       {/* Header */}
       <header>
-          <h1 style={activeIndex === null ? null : {pointerEvents: "none"}}>Archive</h1>
+          <h1 >Archive</h1>
           <p className="header-lesser-text" onClick={() => {
             if (menuOpen === 1) {
               setMenu(0)
               return
             }
             setMenu(1)
-          }} style={activeIndex === null ? null : {pointerEvents: "none"}}>Tag list</p>
+          }} >Tag list</p>
           <p className="header-lesser-text" onClick={() => {
             if (menuOpen === 2) {
               setMenu(0)
@@ -90,7 +91,7 @@ function App() {
             }
             setMenu(2)
           }}
-          style={activeIndex === null ? null : {pointerEvents: "none"}}
+          
           >Settings</p>
           <p className="header-lesser-text" onClick={() => {
             if (menuOpen === 3) {
@@ -99,7 +100,7 @@ function App() {
             }
             setMenu(3)
           }}
-          style={activeIndex === null ? null : {pointerEvents: "none"}}
+          
           >Utilities</p>
           <div>
               {/* <input type="text" placeholder="Query with tags..."/> */}
@@ -111,7 +112,7 @@ function App() {
 
 
 
-      {timeDepth === 1 ? <h2 onClick={() => {
+{/*       {timeDepth === 1 ? <h2 onClick={() => {
          setDepth(0)
           let fullURL = "/dashboard"
           fetch(fullURL).then(
@@ -133,26 +134,24 @@ function App() {
           })
         }}
         style={activeIndex === null ? null : {pointerEvents: "none"}}
-        >{photoData[2][0].Year + " > " + photoData[2][0].Month}</h2> : ""}
-      {
-        activeIndex == null ? (
-          ""
-        ) :
-        (
+        >{photoData[2][0].Year + " > " + photoData[2][0].Month}</h2> : ""} */}
+      
+
+        
           <>
             {/* Fullscreen Arrow Navigation Elements */}
-            <div className="fullscreen-nav-arrows">
-                <p className="left-arrow"
+{/*             <div className="fullscreen-nav-arrows inactive">
+                <p className="left-arrow inactive"
                   onClick={(e) => {decrementState()}}
                 >&#10094;</p>
-                <p className="right-arrow"
+                <p className="right-arrow inactive"
                   onClick={() => incrementState()}
                 >&#10095;</p>
 
-            </div>
+            </div> */}
             {/* Photo Information Elements */}
             
-            <div className="img-info-div">
+{/*             <div className="img-info-div inactive">
               <p>
                 {photoData[2][activeIndex].City ? photoData[2][activeIndex].City : "N/A" }, {photoData[2][activeIndex].Country}
               </p>
@@ -170,10 +169,10 @@ function App() {
               <p>
                 {photoData[2][activeIndex].Path? photoData[2][activeIndex].Path : "N/A"}
               </p>
-            </div>
+            </div> */}
           </>
         )
-      }
+      
       {/* Main render for gallery  */}
       {
         filters !== null && filters !== undefined && filters !== undefined ? 
@@ -208,137 +207,45 @@ function App() {
         )
       }
       
+      {/* 
+        OPTION 1:
+        Render first 10 of each timeFrame
+        Render the button at the end
+          If clicked, set next 10 of matching data to have a visible class
+            If there are fewer than 10 left, show that in the button's text
+        If there are none left, do not render the button
+
+        OPTION 2:
+        Render first 10 of each timeFrame
+          By breaking render loop via a frameLimit state variable
+        Render button at the end
+        If clicked, increment limit by 10
+          If there are fewer than 10 left, show that in the button's text
+          If there are none left, do not render the button
+
+      
+      */}
+      
 
       {
         photoData[0] !== undefined ? 
         
             ( 
               photoData[0].map((timeFrame, i) => {
-
-                
-                return (
+                if (timeDepth === 0) {
                   
-                  
-                  <>
-
-
-                        {
-                          /* filters !== null ? <h2>{JSON.stringify(filters)}</h2> : "" */
-                        }
-
-
-                        {
-                          timeDepth < 1 && filters === null ? (<h2 className="time-heading first-check" key={i}
-                        onClick={(event) => {
-                          setDepth(timeDepth + 1)
-                          let queryString = new URLSearchParams(timeFrame).toString()
-                          let fullURL = "/time:" + queryString
-                          fetch(fullURL).then(
-                            (res) => res.json()
-                          ).then((data) => {
-                            setData(data)
-                          })
-                        }}
-                      >{timeFrame}</h2>) : <h2 className="time-heading here" key={i}
-                      onClick={(event) => {
-                        setDepth(timeDepth + 1)
-                        let queryString = new URLSearchParams(timeFrame).toString()
-                        let queryEnd = new URLSearchParams(photoData[2][0].Year)
-                        let fullURL = "/test/:" + queryString + "/:" + queryEnd
-                        fetch(fullURL).then(
-                          (res) => res.json()
-                        ).then((data) => {
-                          setData(data)
-                        })
-                      }}
-
-                      style={activeIndex === null ? null : {pointerEvents: "none"}}
-                    >{timeFrame}</h2>
-                        }
-
-                        {
-                          timeDepth === 1 && filters !== null ? <h2 className="time-heading here" key={i}
-                      onClick={(event) => {
-                        setDepth(timeDepth + 1)
-                        let queryString = new URLSearchParams(timeFrame).toString()
-                        let queryEnd = new URLSearchParams(photoData[2][0].Year)
-                        let fullURL = "/test/:" + queryString + "/:" + queryEnd
-                        fetch(fullURL).then(
-                          (res) => res.json()
-                        ).then((data) => {
-                          setData(data)
-                        })
-                      }}
-
-                      style={activeIndex === null ? null : {pointerEvents: "none"}}
-                    >{timeFrame}</h2> : ""
-                        }
-
-                    {
-                      photoData[2] !== undefined ? 
-                        photoData[2].map((row, j) => {
-
-
-                          if (timeDepth === 0) {
-                            if (row.Year == timeFrame) {
-                              return <YearSlice key={j} props={row} 
-                                updateFunction={updateActiveImg}
-                                elIndex={j}
-                                currIndex={activeIndex}
-                              ></YearSlice>
-                            } else {
-                              return <></>
-                            }
-                          }
-
-                          if (timeDepth === 1) {
-                            if (row.Month == timeFrame) {
-                              if (filters !== null) {
-                                if (
-                                  [row.Tags].some(r => filters.includes(r))
-                                ) {
-                                return <YearSlice key={j} props={row} 
-                                updateFunction={updateActiveImg}
-                                elIndex={j}
-                                currIndex={activeIndex}
-                              ></YearSlice>
-                                } else {
-                                  return <></>
-                                }
-                              } else {
-                                return <YearSlice key={j} props={row} 
-                                updateFunction={updateActiveImg}
-                                elIndex={j}
-                                currIndex={activeIndex}
-                              ></YearSlice>
-                              }
-                            } else {
-                              return <></>
-                            }
-                          }
-
-                          if (timeDepth === 2) {
-                            if (row.Day == timeFrame) {
-                              return <YearSlice key={j} props={row} 
-                                updateFunction={updateActiveImg}
-                                elIndex={j}
-                                currIndex={activeIndex}
-                              ></YearSlice>
-                            } else {
-                              return <></>
-                            }
-                          }
-
-                          
-                        })
-                      : <p style={activeIndex === null ? null : {pointerEvents: "none"}}>Loading...</p>
-                    }
-                  </>
-                )
+                  return (
+                    <YearSlice timeFrame={timeFrame}
+                      rows={
+                        photoData[2].filter((r) => r.Year === timeFrame)
+                      }
+                     />
+                  ) 
+                }
               })
             )
             
-        : <p style={activeIndex === null ? null : {pointerEvents: "none"}}>Loading...</p>
+        : <p>Loading...</p>
       }
     </div>
   );

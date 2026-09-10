@@ -182,14 +182,14 @@ div#root > div > img {
   
 }
 
-div#root > div > img:not(.fullscreen):hover {
+/* div#root > div > img:not(.fullscreen):hover {
   transform: scale(1.2);
 
 }
 
 body:has(.fullscreen) {
   overflow-y: hidden;
-}
+} */
 
 /* div#root > div > img:active {
   transform: scale(5);
@@ -198,7 +198,7 @@ body:has(.fullscreen) {
 */
 
 
-img.fullscreen {
+/* img.fullscreen {
 position: fixed;
 top: 40%;
 left: 50%;
@@ -211,6 +211,34 @@ z-index: 10;
 
 box-shadow: 0 0 5px 800px rgba(199, 199, 199, 0.623);
 
+} */
+
+img.img-preview {
+  transition: all;
+  transition-duration: 0.2s;
+}
+
+img.img-preview:not(.wide-view):hover {
+  transform: scale(1.2);
+}
+
+img.wide-view {
+  border: 0.2rem solid violet;
+ /* position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 50vh;
+  height: 50vh;
+
+  z-index: 10;
+
+  box-shadow: 0 0 5px 800px rgba(199, 199, 199, 0.623); */
+}
+
+body:has(.wide-view) > * {
+  pointer-events: none;
 }
 
 div.img-info-div {
@@ -244,6 +272,7 @@ div.img-info-div p:last-child {
   margin-top: -10%;
 }
 
+
 .fullscreen-nav-arrows {
   position: fixed;
   top: 38%;
@@ -265,4 +294,24 @@ div.img-info-div p:last-child {
 .left-arrow, .right-arrow {
   font-size: 6rem;
   cursor:pointer;
+}
+
+/* Add Image Button */
+
+.img-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1%;
+}
+
+.img-section > * {
+  margin-top: 1%;
+}
+
+.add-img-btn {
+  width: 200px;
+  height: 200px;
 }
