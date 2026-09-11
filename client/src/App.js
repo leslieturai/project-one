@@ -15,6 +15,9 @@ function App() {
 
   const [filters, setFilters] = useState(null)
 
+  const [activeIndex, setIndex] = useState(null)
+
+
 
   const handleFilterUpdate = (filterArg) => {
     if (filters !== null) {
@@ -25,6 +28,20 @@ function App() {
     setFilters(...[filterArg])
   }
 
+  const IndexHandler = (newIndex) => {
+    setIndex(newIndex)
+  }
+
+  const incrementIndex = () => {
+    setIndex(activeIndex + 1)
+  }
+
+  const decrementIndex = () => {
+    setIndex(activeIndex - 1)
+  }
+
+
+  
 
 
 
@@ -50,7 +67,7 @@ function App() {
           }
   }, [photoData]) */
 
-/*   useEffect(() => {
+  useEffect(() => {
     if (photoData === null || photoData[2] === undefined || photoData == {} || photoData[2][0].Id === undefined) {
       console.log("Nothing here")
       return
@@ -58,16 +75,16 @@ function App() {
 
   document.addEventListener("keydown", function (event) {
     if (event.key === "e") {
-      incrementState()
+      incrementIndex()
     } 
     if (event.key === "q") {
-      decrementState()
+      decrementIndex()
     } 
     if (event.key == "Escape") {
       setIndex(null)
     }
   })
-}, []) */
+}, [])
 
 
 
@@ -228,20 +245,31 @@ function App() {
       
 
       {
-        photoData[0] !== undefined ? 
+        photoData[2] !== undefined ? 
         
             ( 
-              photoData[0].map((timeFrame, i) => {
-                if (timeDepth === 0) {
-                  
+              photoData[2].map((e, i) => {
+                if (i === 0) {
                   return (
-                    <YearSlice timeFrame={timeFrame}
-                      rows={
-                        photoData[2].filter((r) => r.Year === timeFrame)
-                      }
-                     />
-                  ) 
-                }
+                  <>
+                    <h2>{e.Year}</h2>
+                    <YearSlice key={i} img={e} mapIndex={i} activeIndex={activeIndex} handleIndex={IndexHandler}/>
+                  </>
+                  )
+                } else if (e.Year !== photoData[2][i - 1].Year) {
+                  return (
+                  <>
+                    <h2>{e.Year}</h2>
+                    <YearSlice key={i} img={e} mapIndex={i} activeIndex={activeIndex} handleIndex={IndexHandler}/>
+                  </>
+                  )
+                } else {
+                    return (
+                    <YearSlice key={i} img={e} mapIndex={i} activeIndex={activeIndex} handleIndex={IndexHandler}/>
+
+                )
+                }                
+
               })
             )
             
