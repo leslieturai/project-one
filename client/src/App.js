@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import YearSlice from "./components/YearSlice/YearSlice";
 import TagList from "./components/TagList/TagList";
 import Settings from "./components/Settings/Settings";
@@ -16,6 +16,7 @@ function App() {
   const [filters, setFilters] = useState(null)
 
   const [activeIndex, setIndex] = useState(null)
+  const [activeFrame, setFrame] = useState(null)
 
 
 
@@ -71,6 +72,7 @@ function App() {
   useEffect(() => {
     if (photoData === null || photoData[2] === undefined || photoData == {} || photoData[2][0].Id === undefined) {
       console.log("Nothing here")
+      
       return
     }
 
@@ -85,9 +87,14 @@ function App() {
       setIndex(null)
     }
   })
+  
 }, [activeIndex])
 
-
+/* useEffect(() => {
+  if (photoData[0] !== null && photoData[0] !== undefined) {
+     setFrame(photoData[0][0])
+  }
+}, [photoData]) */
 
 
 
@@ -256,8 +263,7 @@ function App() {
 
             ( 
               photoData[0].map((timeFrame, i) => {
-
-
+                
                 return (
 
 
@@ -303,7 +309,9 @@ function App() {
 
                     {
                       photoData[2] !== undefined ? 
-                        photoData[2].map((row, j) => {
+                        //photoData[2].filter(data => data.Year === activeFrame).slice(0, 10).map((row, j) => {
+                          photoData[2].map((row, j) => {
+                          
 
 
                           if (timeDepth === 0) {
