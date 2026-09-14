@@ -114,7 +114,7 @@ header > .header-lesser-text:hover {
   border-radius: 1rem;
 }
 
-div.tag-list-div + h2.time-heading {
+/* div.tag-list-div + h2.time-heading {
   color: aqua !important;
   position: absolute;
   opacity: 0;
@@ -122,14 +122,19 @@ div.tag-list-div + h2.time-heading {
 
 h2.time-heading ~ h2.time-heading {
   color: red;
-    position: absolute;
+  position: absolute;
   opacity: 0;
 }
 
 h2.time-heading:has(+ img.image-preview) {
   color: violet !important;
-    position: relative;
+  position: relative;
   opacity: 1;
+} */
+
+h2.filtered {
+  position: absolute;
+  opacity: 0;
 }
 
 

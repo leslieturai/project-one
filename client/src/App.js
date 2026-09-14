@@ -57,6 +57,7 @@ function App() {
     
   }, [])
 
+
 /*   useEffect(() => {
       if (photoData[2] !== null && photoData[2] !== undefined) {
             console.log(
@@ -85,6 +86,8 @@ function App() {
     }
   })
 }, [activeIndex])
+
+
 
 
 
@@ -129,7 +132,7 @@ function App() {
 
 
 
-{/*       {timeDepth === 1 ? <h2 onClick={() => {
+      {timeDepth === 1 ? <h2 onClick={() => {
          setDepth(0)
           let fullURL = "/dashboard"
           fetch(fullURL).then(
@@ -151,7 +154,7 @@ function App() {
           })
         }}
         style={activeIndex === null ? null : {pointerEvents: "none"}}
-        >{photoData[2][0].Year + " > " + photoData[2][0].Month}</h2> : ""} */}
+        >{photoData[2][0].Year + " > " + photoData[2][0].Month}</h2> : ""}
       
 
         
@@ -248,38 +251,123 @@ function App() {
       
       */}
       
+        {
+        photoData[0] !== undefined ? 
 
-      {
-        photoData[2] !== undefined ? 
-        
             ( 
-              photoData[2].map((e, i) => {
-                if (i === 0) {
-                  return (
-                  <>
-                    <h2>{e.Year}</h2>
-                    <YearSlice key={i} img={e} mapIndex={i} activeIndex={activeIndex} handleIndex={IndexHandler}/>
-                  </>
-                  )
-                } else if (e.Year !== photoData[2][i - 1].Year) {
-                  return (
-                  <>
-                    <h2>{e.Year}</h2>
-                    <YearSlice key={i} img={e} mapIndex={i} activeIndex={activeIndex} handleIndex={IndexHandler}/>
-                  </>
-                  )
-                } else {
-                    return (
-                    <YearSlice key={i} img={e} mapIndex={i} activeIndex={activeIndex} handleIndex={IndexHandler}/>
+              photoData[0].map((timeFrame, i) => {
 
+
+                return (
+
+
+                  <>
+
+                      {/* 
+                        If filtered, only show filtered elements and a header for what's being filtered for (this is done above)
+
+                        If there are no filters, show the normal page
+                          If timeDepth === 1, show the monthly view
+                          If timeDepth === 2, show the daily view of a month/year
+
+                        
+                      */}
+                    {
+                    timeDepth < 1 && filters === null ? (<h2 className="" key={i}
+                      onClick={(event) => {
+                          setDepth(timeDepth + 1)
+                          let queryString = new URLSearchParams(timeFrame).toString()
+                          let fullURL = "/time:" + queryString
+                          fetch(fullURL).then(
+                            (res) => res.json()
+                          ).then((data) => {
+                            setData(data)
+                          })
+                        }}
+                      >{timeFrame}</h2>) : 
+                      <h2 className={filters !== null ? "filtered" : ""} key={i}
+                          onClick={(event) => {
+                            setDepth(timeDepth + 1)
+                            let queryString = new URLSearchParams(timeFrame).toString()
+                            let queryEnd = new URLSearchParams(photoData[2][0].Year)
+                            let fullURL = "/test/:" + queryString + "/:" + queryEnd
+                            fetch(fullURL).then(
+                              (res) => res.json()
+                            ).then((data) => {
+                              setData(data)
+                            })
+                          }}
+                        style={activeIndex === null ? null : {pointerEvents: "none"}}
+                      >{timeFrame}</h2>
+                    }
+
+                    {
+                      photoData[2] !== undefined ? 
+                        photoData[2].map((row, j) => {
+
+
+                          if (timeDepth === 0) {
+                            if (row.Year == timeFrame) {
+                              return <YearSlice key={j} img={row} 
+                                handleIndex={IndexHandler}
+                                mapIndex={j}
+                                activeIndex={activeIndex}
+                              ></YearSlice>
+                            } else {
+                              return <></>
+                            }
+                          }
+
+                          if (timeDepth === 1) {
+                            if (row.Month == timeFrame) {
+                              if (filters !== null) {
+                                if (
+                                  [row.Tags].some(r => filters.includes(r))
+                                ) {
+                                return <YearSlice key={j} img={row} 
+                                handleIndex={IndexHandler}
+                                mapIndex={j}
+                                activeIndex={activeIndex}
+                              ></YearSlice>
+                                } else {
+                                  return <></>
+                                }
+                              } else {
+                                return <YearSlice key={j} img={row} 
+                                handleIndex={IndexHandler}
+                                mapIndex={j}
+                                activeIndex={activeIndex}
+                              ></YearSlice>
+                              }
+                            } else {
+                              return <></>
+                            }
+                          }
+
+                          if (timeDepth === 2) {
+                            if (row.Day == timeFrame) {
+                              return <YearSlice key={j} img={row} 
+                                handleIndex={IndexHandler}
+                                mapIndex={j}
+                                activeIndex={activeIndex}
+                              ></YearSlice>
+                            } else {
+                              return <></>
+                            }
+                          }
+
+
+                        })
+                      : <p style={activeIndex === null ? null : {pointerEvents: "none"}}>Loading...</p>
+                    }
+                  </>
                 )
-                }                
-
               })
             )
-            
-        : <p>Loading...</p>
+
+        : <p style={activeIndex === null ? null : {pointerEvents: "none"}}>Loading...</p>
       }
+
     </div>
   );
 }
