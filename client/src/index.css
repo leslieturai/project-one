@@ -223,8 +223,8 @@ img.img-preview:not(.wide-view):hover {
 }
 
 img.wide-view {
-  border: 0.2rem solid violet;
- /* position: fixed;
+  /* border: 0.2rem solid violet; */
+ position: fixed;
   top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -234,12 +234,12 @@ img.wide-view {
 
   z-index: 10;
 
-  box-shadow: 0 0 5px 800px rgba(199, 199, 199, 0.623); */
+  box-shadow: 0 0 5px 800px rgba(199, 199, 199, 0.623);
 }
 
-body:has(.wide-view) > * {
+/* body:has(.wide-view) > * {
   pointer-events: none;
-}
+} */
 
 div.img-info-div {
   background-color: rgba(58, 56, 53, 0.95);

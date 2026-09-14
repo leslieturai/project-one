@@ -84,7 +84,7 @@ function App() {
       setIndex(null)
     }
   })
-}, [])
+}, [activeIndex])
 
 
 
@@ -155,20 +155,22 @@ function App() {
       
 
         
-          <>
+          {
+            activeIndex !== null ? (
+              <>
             {/* Fullscreen Arrow Navigation Elements */}
-{/*             <div className="fullscreen-nav-arrows inactive">
+             <div className="fullscreen-nav-arrows inactive">
                 <p className="left-arrow inactive"
-                  onClick={(e) => {decrementState()}}
+                  onClick={(e) => {decrementIndex()}}
                 >&#10094;</p>
                 <p className="right-arrow inactive"
-                  onClick={() => incrementState()}
+                  onClick={() => incrementIndex()}
                 >&#10095;</p>
 
-            </div> */}
+            </div> 
             {/* Photo Information Elements */}
             
-{/*             <div className="img-info-div inactive">
+            <div className="img-info-div inactive">
               <p>
                 {photoData[2][activeIndex].City ? photoData[2][activeIndex].City : "N/A" }, {photoData[2][activeIndex].Country}
               </p>
@@ -186,8 +188,11 @@ function App() {
               <p>
                 {photoData[2][activeIndex].Path? photoData[2][activeIndex].Path : "N/A"}
               </p>
-            </div> */}
+            </div> 
           </>
+            ) :
+            ("")
+          }
         )
       
       {/* Main render for gallery  */}
