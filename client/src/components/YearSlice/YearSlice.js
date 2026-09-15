@@ -12,12 +12,6 @@ export default function YearSlice ({img, mapIndex, activeIndex, handleIndex}) {
     } */
 
 
-
-
-
-
-
-
     return (
 /*         <img loading="lazy" width={200} height={200} src={"http://localhost:3000/image:" + props.props.Id}
 
@@ -31,7 +25,7 @@ export default function YearSlice ({img, mapIndex, activeIndex, handleIndex}) {
         ></img> */
   
            
-
+       
 
 
 

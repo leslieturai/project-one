@@ -16,7 +16,7 @@ function App() {
   const [filters, setFilters] = useState(null)
 
   const [activeIndex, setIndex] = useState(null)
-  const [activeFrame, setFrame] = useState(null)
+  const [activeLimit, setLimit] = useState(null)
 
 
 
@@ -52,11 +52,22 @@ function App() {
           (res) => res.json()
         ).then((data) => {
           setData(data)
-        
         })
       
     
   }, [])
+
+  // Set limits for timeFrame
+  useEffect(() => {
+    // Default
+    if (photoData[2] !== null && photoData[2] !== undefined && timeDepth !== null && timeDepth !== undefined) {
+      if (timeDepth === 0 && activeLimit === null) {
+        let tempLimits = []
+        photoData[0].forEach((elem) => tempLimits.push(10))
+        setLimit(tempLimits)
+      }
+    }
+  }, [photoData])
 
 
 /*   useEffect(() => {
@@ -308,11 +319,9 @@ function App() {
                     }
 
                     {
-                      photoData[2] !== undefined ? 
-                        //photoData[2].filter(data => data.Year === activeFrame).slice(0, 10).map((row, j) => {
+                      
+                      photoData[2] !== undefined && activeLimit !== undefined && activeLimit !== null ? 
                           photoData[2].map((row, j) => {
-                          
-
 
                           if (timeDepth === 0) {
                             if (row.Year == timeFrame) {

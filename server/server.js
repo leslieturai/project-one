@@ -155,7 +155,9 @@ app.get("/dashboard", (req, res) => {
             ` GROUP BY Year, Month, Day` 
             db.all(query, (err, months) => {
                 if (err) return console.log(err)
+                    
                     tempData[tempData.length + 1] = months
+                    
                     res.json(tempData)
                     return
 
@@ -167,7 +169,7 @@ app.get("/dashboard", (req, res) => {
 
 /* General image request */
 app.get("/image:id", (req, res) => {
-    console.log("Getting images")
+    //console.log("Getting images")
     let row = db.all(`SELECT * FROM Photos WHERE Id = ` + req.params.id.split(":")[1], (err, rows) => {
         if (err) return console.log(err)
         //console.log(rows[0])
