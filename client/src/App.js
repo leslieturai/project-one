@@ -1,4 +1,4 @@
-import React, { act, use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import YearSlice from "./components/YearSlice/YearSlice";
 import TagList from "./components/TagList/TagList";
 import Settings from "./components/Settings/Settings";
@@ -15,37 +15,16 @@ function App() {
 
   const [filters, setFilters] = useState(null)
 
-  const [activeIndex, setIndex] = useState(null)
-  const [activeLimit, setLimit] = useState(null)
-
-
 
   const handleFilterUpdate = (filterArg) => {
-    if (filters !== null) {
-          if (filters.includes(filterArg)) {
+    if (filters && filters.length >= 1) {
             console.log("Already here")
-          }
+            setFilters([...filters, ...filterArg])
+    } else {
+      setFilters(filterArg)
     }
-    setFilters(...[filterArg])
+    
   }
-
-  const IndexHandler = (newIndex) => {
-    setIndex(newIndex)
-  }
-
-  const incrementIndex = () => {
-    setIndex(activeIndex + 1)
-  }
-
-  const decrementIndex = () => {
-    setIndex(activeIndex - 1)
-  }
-
-
-  
-
-
-
   
   useEffect(() => {
         fetch("/dashboard").then(
@@ -61,76 +40,12 @@ function App() {
             )
           })
 
-          console.log(tempData)
+          //console.log(tempData)
 
           setData(tempData)
         })
       
-    
   }, [])
-
-  // Set limits for timeFrame
-/*   useEffect(() => {
-    // Default
-    if (photoData[2] !== null && photoData[2] !== undefined && timeDepth !== null && timeDepth !== undefined) {
-      if (timeDepth === 0 && activeLimit === null) {
-        let tempLimits = []
-        photoData[0].forEach((elem) => tempLimits.push(10))
-        setLimit(tempLimits)
-      }
-    }
-  }, [photoData]) */
-
-
-/*   useEffect(() => {
-      if (photoData[2] !== null && photoData[2] !== undefined) {
-            console.log(
-              photoData[2].filter((r) => r.Year == "2023").slice(
-                0, 
-                rangeLimit > 10 ? rangeLimit : 10)
-            )
-          }
-  }, [photoData]) */
-
-
-  useEffect(() => {
-    if (photoData[0] !== null && photoData[0] !== undefined) {
-      let tempLimits = []
-      photoData[0].forEach((elem) => tempLimits.push(10))
-      setLimit(tempLimits)
-    }
-  }, [photoData])
-
-  useEffect(() => {
-    if (photoData === null || photoData[2] === undefined || photoData == {} || photoData[2][0].Id === undefined) {      
-      return
-    }
-
-  document.addEventListener("keydown", function (event) {
-    if (event.key === "e") {
-      incrementIndex()
-    } 
-    if (event.key === "q") {
-      decrementIndex()
-    } 
-    if (event.key == "Escape") {
-      setIndex(null)
-    }
-  })
-  
-}, [activeIndex])
-
-/* useEffect(() => {
-  if (photoData[0] !== null && photoData[0] !== undefined) {
-     setFrame(photoData[0][0])
-  }
-}, [photoData]) */
-
-
-
-
-
-
 
   return (
     <div>
@@ -162,12 +77,7 @@ function App() {
           }}
           
           >Utilities</p>
-          <div>
-              {/* <input type="text" placeholder="Query with tags..."/> */}
-              <div className="tag-div-group">
-                  <p>Tags here</p>
-              </div>
-          </div>
+
       </header>
 
 
@@ -181,8 +91,8 @@ function App() {
             setData(data)
           })
       }}
-      style={activeIndex === null ? null : {pointerEvents: "none"}}
-      >{photoData[2][0].Year}</h2> : ""}
+      
+      >{photoData[2][0].Year}</h2> : <></>}
       {timeDepth === 2 ? <h2 onClick={() => {
           setDepth(1)
           let queryString = new URLSearchParams(photoData[2][0].Year).toString()
@@ -193,15 +103,15 @@ function App() {
             setData(data)
           })
         }}
-        style={activeIndex === null ? null : {pointerEvents: "none"}}
-        >{photoData[2][0].Year + " > " + photoData[2][0].Month}</h2> : ""}
+        
+        >{photoData[2][0].Year + " > " + photoData[2][0].Month}</h2> : <></>}
       
 
         
-          {
+{/*           {
             activeIndex !== null ? (
               <>
-            {/* Fullscreen Arrow Navigation Elements */}
+            
              <div className="fullscreen-nav-arrows inactive">
                 <p className="left-arrow inactive"
                   onClick={(e) => {decrementIndex()}}
@@ -211,7 +121,7 @@ function App() {
                 >&#10095;</p>
 
             </div> 
-            {/* Photo Information Elements */}
+           
             
             <div className="img-info-div inactive">
               <p>
@@ -234,8 +144,8 @@ function App() {
             </div> 
           </>
             ) :
-            ("")
-          }
+            <></>
+          } */}
         )
       
       {/* Main render for gallery  */}
@@ -243,7 +153,7 @@ function App() {
         filters !== null && filters !== undefined && filters !== undefined ? 
         <p className="filter-text">Results for: {filters[0]}</p>
         : 
-        ""
+        <></>
       }
       {
         menuOpen === 1 ? (
@@ -271,9 +181,28 @@ function App() {
           <></>
         )
       }
-      
 
 
+      {
+        photoData !== null && photoData !== undefined && Array.isArray(photoData) ? (
+          photoData.slice(1, photoData.length).map((data, i) => {
+              if (filters) {
+                
+                //console.log(data.filter(r => filters.includes(r.Tags)))
+                return (
+                  <YearSlice key={i} row={data.filter(r => filters.includes(r.Tags))}/>
+                )
+              } else {
+                return (
+                  <>
+                    
+                    <YearSlice key={i} row={data}/>
+                  </>
+                )
+              }
+          })
+        ) : (<p>Loading...</p>)
+      }
       
 
     </div>
