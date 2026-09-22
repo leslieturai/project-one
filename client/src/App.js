@@ -17,12 +17,37 @@ function App() {
 
 
   const handleFilterUpdate = (filterArg) => {
-    if (filters && filters.length >= 1) {
-            console.log("Already here")
-            setFilters([...filters, ...filterArg])
-    } else {
-      setFilters(filterArg)
-    }
+      /*
+        Push new filter into array on click
+
+        Check if it exists, if it doesn, then remove it
+          If it doesn't, then add it
+
+        
+      */
+
+        
+
+        
+      if (filters === null) {
+        console.log("first")
+        setFilters([String(filterArg)])
+      } else if (filters.length >= 1) {
+        console.log("second")
+        if (filters.includes(String(filterArg))) {
+          if (filters.length === 1) {
+            setFilters(null)
+            return
+          } else {
+            console.log("already here!")
+            setFilters(
+              filters.filter(f => f !== String(filterArg))
+            )
+            return
+          }
+        }
+        setFilters([...filters, String(filterArg)])
+      }
     
   }
   
@@ -46,6 +71,7 @@ function App() {
         })
       
   }, [])
+  
 
   return (
     <div>
