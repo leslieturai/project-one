@@ -16,9 +16,30 @@ export default function YearSlice (row) {
 
     return (
     <>
-        {
+        { // rowData.row[0].Year
         rowData.row !== null && rowData.row !== undefined && rowData.row.length !== 0 ? (
-            <h2>{rowData.row[0].Year}</h2>
+            <h2
+                onClick={() => {
+                    //setDepth(1)
+                    /* let queryString = new URLSearchParams(photoData[2][0].Year).toString()
+                    let fullURL = "/time:" + queryString
+                    fetch(fullURL).then(
+                        (res) => res.json()
+                    ).then((data) => {
+                        setData(data)
+                    }) */ 
+                   row.updateDepth(1)                
+                    let queryString = new URLSearchParams(rowData.row[0].Year.toString())
+                    let fullURL = "/time:" + queryString
+                    fetch(fullURL).then(
+                        (res) => res.json()
+                    ).then((data) => {
+                        row.updateFunc(data)
+                    })
+                }}
+            >{
+               rowData.row[0].Year
+            }</h2>
         ) : (
             <p>Loading...</p>
         )

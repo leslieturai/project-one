@@ -8,27 +8,13 @@ function App() {
 
   const [photoData, setData] = useState({})
 
-
   const [menuOpen, setMenu] = useState(null)
 
   const [timeDepth, setDepth] = useState(0)
 
   const [filters, setFilters] = useState(null)
 
-
-  const handleFilterUpdate = (filterArg) => {
-      /*
-        Push new filter into array on click
-
-        Check if it exists, if it doesn, then remove it
-          If it doesn't, then add it
-
-        
-      */
-
-        
-
-        
+  const handleFilterUpdate = (filterArg) => {      
       if (filters === null) {
         console.log("first")
         setFilters([String(filterArg)])
@@ -48,11 +34,19 @@ function App() {
         }
         setFilters([...filters, String(filterArg)])
       }
-    
   }
-  
+
+  const handleDataUpdate = (dataArg) => {
+    setData(dataArg)
+  }
+
+  const handleDepth = (depthArg) => {
+    setDepth(depthArg)
+  }
+
   useEffect(() => {
-        fetch("/dashboard").then(
+        if (timeDepth === 0) {
+          fetch("/dashboard").then(
           (res) => res.json()
         ).then((data) => {
           //setData(data)
@@ -69,8 +63,11 @@ function App() {
 
           setData(tempData)
         })
+        } else if (timeDepth === 1) {
+          
+        }
       
-  }, [])
+  }, [photoData])
   
 
   return (
@@ -222,7 +219,13 @@ function App() {
                 return (
                   <>
                     
-                    <YearSlice key={i} row={data}/>
+                    <YearSlice 
+                      key={i} 
+                      row={data}
+                      depth={timeDepth}
+                      updateDepth={handleDepth}
+                      updateFunc={handleDataUpdate}
+                      />
                   </>
                 )
               }
