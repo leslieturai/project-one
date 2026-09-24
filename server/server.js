@@ -227,9 +227,13 @@ app.get("/test/:month/:year", (req, res) => {
                 ` AND Year = ` + JSON.stringify(req.params.year.split(":")[1].split("=")[0]), 
                 (err, rows) => {
                     if (err) return console.log(err)
-                    console.log(rows)
-                    tempData[tempData.length + 1] = rows
-                    console.log("here, sending...")
+
+                    tempData[0].forEach((tempDay, i) => {
+                        tempData.push(
+                            rows.filter((e , i) => e.Day === tempDay)
+                        )
+                    })
+
                     res.json(tempData)
                 }
             )
