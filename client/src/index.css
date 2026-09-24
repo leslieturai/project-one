@@ -190,6 +190,55 @@ div#root > div > img {
   
 }
 
+/* Img info display */
+
+body:has(*.fullscreen) {
+  overflow-y: hidden;
+  pointer-events: none;
+}
+
+div#root > div > section > img.fullscreen {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 50vh;
+  height: 50vh;
+
+  z-index: 10;
+
+  box-shadow: 0 0 5px 800px rgba(199, 199, 199, 0.623);
+  pointer-events:all;
+}
+
+div#root > div > div.info-div {
+  background-color: gray;
+  width: 50vh;
+  height: 20vh;
+
+  z-index: 10;
+  position: fixed;
+  top: 68%;
+  left: 22%;
+  padding: 0.1rem;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+
+  pointer-events: all;
+
+}
+
+div#root > div > div.info-div > p {
+  font-size: 1.5rem;
+  font-style: italic;
+  margin-left: 15%;
+}
+
+
 /* div#root > div > img:not(.fullscreen):hover {
   transform: scale(1.2);
 
@@ -244,10 +293,6 @@ img.wide-view {
 
   box-shadow: 0 0 5px 800px rgba(199, 199, 199, 0.623);
 }
-
-/* body:has(.wide-view) > * {
-  pointer-events: none;
-} */
 
 div.img-info-div {
   background-color: rgba(58, 56, 53, 0.95);

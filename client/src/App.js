@@ -63,11 +63,7 @@ function App() {
 
           setData(tempData)
         })
-        } else if (timeDepth === 1) {
-          console.log("here")
-          //console.log(photoData)
-        }
-      
+        } 
   }, [timeDepth])
   
 
@@ -104,8 +100,6 @@ function App() {
 
       </header>
 
-
-
       {timeDepth === 1 ? <h2 onClick={() => {
          setDepth(0)
           let fullURL = "/dashboard"
@@ -117,59 +111,18 @@ function App() {
       }}
       
       >{photoData[2][0].Year}</h2> : <></>}
-      {timeDepth === 2 ? <h2 onClick={() => {
-          setDepth(1)
-          let queryString = new URLSearchParams(photoData[2][0].Year).toString()
-          let fullURL = "/time:" + queryString
-          fetch(fullURL).then(
-            (res) => res.json()
-          ).then((data) => {
-            setData(data)
-          })
-        }}
-        
-        >{photoData[2][0].Year + " > " + photoData[2][0].Month}</h2> : <></>}
-      
-
-        
-{/*           {
-            activeIndex !== null ? (
-              <>
-            
-             <div className="fullscreen-nav-arrows inactive">
-                <p className="left-arrow inactive"
-                  onClick={(e) => {decrementIndex()}}
-                >&#10094;</p>
-                <p className="right-arrow inactive"
-                  onClick={() => incrementIndex()}
-                >&#10095;</p>
-
-            </div> 
-           
-            
-            <div className="img-info-div inactive">
-              <p>
-                {photoData[2][activeIndex].City ? photoData[2][activeIndex].City : "N/A" }, {photoData[2][activeIndex].Country}
-              </p>
-              <p>
-                {photoData[2][activeIndex].Day ? photoData[2][activeIndex].Day : "N/A"}/
-                {photoData[2][activeIndex].Month ? photoData[2][activeIndex].Month : "N/A"}/
-                {photoData[2][activeIndex].Year ? photoData[2][activeIndex].Year : "N/A"}
-              </p>
-              <p>
-                {photoData[2][activeIndex].Name ? photoData[2][activeIndex].Name : "N/A"}
-              </p>
-              <p>
-                {photoData[2][activeIndex].Season ? photoData[2][activeIndex].Season : "N/A"}
-              </p>
-              <p>
-                {photoData[2][activeIndex].Path? photoData[2][activeIndex].Path : "N/A"}
-              </p>
-            </div> 
-          </>
-            ) :
-            <></>
-          } */}
+        {timeDepth === 2 ? <h2 onClick={() => {
+            setDepth(1)
+            let queryString = new URLSearchParams(photoData[2][0].Year).toString()
+            let fullURL = "/time:" + queryString
+            fetch(fullURL).then(
+              (res) => res.json()
+            ).then((data) => {
+              setData(data)
+            })
+          }}
+          
+          >{photoData[2][0].Year + " > " + photoData[2][0].Month}</h2> : <></>}
         )
       
       {/* Main render for gallery  */}
@@ -214,7 +167,9 @@ function App() {
                 
                 //console.log(data.filter(r => filters.includes(r.Tags)))
                 return (
-                  <YearSlice key={i} row={data.filter(r => filters.includes(r.Tags))}/>
+                  <YearSlice key={i} row={data.filter(r => filters.includes(r.Tags))} depth={timeDepth}
+                      updateDepth={handleDepth}
+                      updateFunc={handleDataUpdate}/>
                 )
               } else {
                 return (

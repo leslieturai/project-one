@@ -1,12 +1,24 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 
 export default function YearSlice (row) {
     const [rowData, setRow] = useState(row)
 
     const [rangeLimit, setLimit] = useState(10)
 
+    const [activeIndex, setIndex] = useState(null)
+
     const handleLimit = () => {
         setLimit (rangeLimit + 10)
+    }
+
+    const handleClassChange = (ev) => {
+        if (ev.target.className == "fullscreen") {
+            ev.target.className = "img-preview"
+            setIndex(null)
+            //props.updateFunc(null)
+        } else {
+            ev.target.className = "fullscreen"
+        }
     }
 
     useEffect(() => {
@@ -18,6 +30,20 @@ export default function YearSlice (row) {
     if (row.depth === 0) {
         return (
     <>
+        {
+            activeIndex !== null ? (
+                <div className="info-div">
+                    <p>{rowData.row[activeIndex] ? rowData.row[activeIndex].Name : "N/A"}</p>
+                    <p>{rowData.row[activeIndex] ? rowData.row[activeIndex].Day + "/" + rowData.row[activeIndex].Month + "/" + rowData.row[activeIndex].Year : "N/A"}</p>
+                    <p>{rowData.row[activeIndex] ? rowData.row[activeIndex]?.City + rowData.row[activeIndex]?.Country : "N/A" }</p>
+                    {/* <p>{rowData.row[activeIndex] ? rowData.row[activeIndex]?.Weather : "N/A"}</p> */}
+                    <p>{rowData.row[activeIndex] ? rowData.row[activeIndex].Season : "N/A"}</p>
+                    <p>Id: #{rowData.row[activeIndex] ? rowData.row[activeIndex].Id : "N/A"}</p>
+                    <p>{rowData.row[activeIndex] ? "Tags: " + rowData.row[activeIndex].Tags.toString() : "N/A"}</p>
+                </div>
+            ) : (<></>)
+        }
+
         { 
             rowData.row !== null && rowData.row !== undefined && rowData.row.length !== 0 ? (
                 <h2
@@ -44,7 +70,12 @@ export default function YearSlice (row) {
                     if (i === Number(rowData.row.slice(0, rangeLimit).length - 1)) {
                         return (
                             <>
-                                <img loading="lazy" width={200} height={200} src={"http://localhost:3000/image:" + imgRow.Id} className="img-preview"></img>
+                                <img loading="lazy" width={200} height={200} src={"http://localhost:3000/image:" + imgRow.Id} className="img-preview"
+                                    onClick={(e) => {
+                                        handleClassChange(e)
+                                        setIndex(i)
+                                    }}
+                                ></img>
                                 {
                                     rowData.row !== null && rowData.row !== undefined && rowData.row.length !== 0 && rowData.row.length - rangeLimit > 0 ? (
                                         <button className="add-img-btn" onClick={() => handleLimit()}>
@@ -59,7 +90,9 @@ export default function YearSlice (row) {
                 } else {
                      return (
                         <>
-                            <img loading="lazy" width={200} height={200} src={"http://localhost:3000/image:" + imgRow.Id} className="img-preview"></img>
+                            <img loading="lazy" width={200} height={200} src={"http://localhost:3000/image:" + imgRow.Id} className="img-preview" onClick={(e) => {
+                                setIndex(i)
+                                handleClassChange(e)}}></img>
                         </>
                     )
                 }
@@ -181,6 +214,11 @@ export default function YearSlice (row) {
         </section>
     </>
     )
+    } else {
+        console.log(rowData)
+        return (
+            <h2>error</h2>
+        )
     }
 
     
