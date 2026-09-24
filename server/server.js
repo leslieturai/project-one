@@ -193,7 +193,12 @@ app.get("/time:year", (req, res) => {
             db.all(
                 `SELECT * FROM Photos WHERE Year = ` + req.params.year.split(":")[1].split("=")[0], (err, days) => {
                     if (err) return console.log(err)
-                    tempData[tempData.length + 1] = days
+                    //tempData[tempData.length + 1] = days
+                    tempData[0].forEach((tempMonth, i) => {
+                        tempData.push(
+                            days.filter((e, i) => e.Month === tempMonth)
+                        )
+                    })
                     //console.log(tempData)
                     res.json(tempData)
                 }

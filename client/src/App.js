@@ -64,10 +64,11 @@ function App() {
           setData(tempData)
         })
         } else if (timeDepth === 1) {
-          
+          console.log("here")
+          //console.log(photoData)
         }
       
-  }, [photoData])
+  }, [timeDepth])
   
 
   return (
