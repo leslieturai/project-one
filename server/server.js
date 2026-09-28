@@ -239,13 +239,33 @@ app.get("/test/:month/:year", (req, res) => {
             )
         }
     )
-
-
-
-    
 })
 
 
+/* POST request for updating image fields */
+
+app.post("/set/img/:id/{:country}{/:season}{/:city}{/:weather}{/:tags}", (req, res) => {
+    console.log(req.params.id.split(":")[1].split("=")[0], req.params.country.split(":")[1].split("=")[0])
+    let query = `UPDATE Photos 
+    SET Country =` + JSON.stringify(req.params.country.split(":")[1].split("=")[0]) + `WHERE Id =` + JSON.stringify(req.params.id.split(":")[1].split("=")[0])
+
+    db.run(query, (err) => {
+        if (err) return console.log(err)
+        
+        res.send("Data set!")
+    })
+})
+
+
+
+
+/*     
+
+    this.season = season,
+    this.country = country,
+    this.city = city,
+    this.weather = weather
+    this.tags = "" */
 
 
 app.listen(5000, () => {

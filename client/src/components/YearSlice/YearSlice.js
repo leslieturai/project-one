@@ -7,6 +7,8 @@ export default function YearSlice (row) {
 
     const [activeIndex, setIndex] = useState(null)
 
+    const [changedBool, setBool] = useState(false)
+
     const handleLimit = () => {
         setLimit (rangeLimit + 10)
     }
@@ -21,6 +23,25 @@ export default function YearSlice (row) {
         }
     }
 
+    const handleSubmit = (ev) => {
+        ev.preventDefault()
+        const form = ev.target
+        const formData = new FormData(form)
+
+        const Id = new URLSearchParams(rowData.row[activeIndex].Id).toString()
+        const Country = new URLSearchParams(formData.get("Country")).toString()
+
+        //console.log(Id, Country)
+        
+        fetch("/set/img/:" + Id + "/:" + Country, {
+            method: "POST"
+        }).then((res) => {
+            res.json()
+        }).then((data) => {
+            console.log(data)
+        })
+    }
+
     useEffect(() => {
         setRow(row)
         //console.log(row)
@@ -32,15 +53,16 @@ export default function YearSlice (row) {
     <>
         {
             activeIndex !== null ? (
-                <div className="info-div">
+                <form className="info-form" onSubmit={handleSubmit}>
                     <p>{rowData.row[activeIndex] ? rowData.row[activeIndex].Name : "N/A"}</p>
                     <p>{rowData.row[activeIndex] ? rowData.row[activeIndex].Day + "/" + rowData.row[activeIndex].Month + "/" + rowData.row[activeIndex].Year : "N/A"}</p>
-                    <p>{rowData.row[activeIndex] ? rowData.row[activeIndex]?.City + rowData.row[activeIndex]?.Country : "N/A" }</p>
+                    <input name="Country" onChange={() => setBool(true)}  placeholder={rowData.row[activeIndex] ? rowData.row[activeIndex]?.City + rowData.row[activeIndex]?.Country : "N/A" }></input>
                     {/* <p>{rowData.row[activeIndex] ? rowData.row[activeIndex]?.Weather : "N/A"}</p> */}
                     <p>{rowData.row[activeIndex] ? rowData.row[activeIndex].Season : "N/A"}</p>
-                    <p>Id: #{rowData.row[activeIndex] ? rowData.row[activeIndex].Id : "N/A"}</p>
+                    <input name="Id" disabled={true} placeholder={rowData.row[activeIndex] ? "Id: #" + rowData.row[activeIndex].Id : "N/A"}></input>
                     <p>{rowData.row[activeIndex] ? "Tags: " + rowData.row[activeIndex].Tags.toString() : "N/A"}</p>
-                </div>
+                    <button disabled={!changedBool} type="submit">Submit Changes</button>
+                </form>
             ) : (<></>)
         }
 

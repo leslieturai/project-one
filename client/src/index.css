@@ -212,7 +212,7 @@ div#root > div > section > img.fullscreen {
   pointer-events:all;
 }
 
-div#root > div > div.info-div {
+div#root > div > form.info-form {
   background-color: gray;
   width: 50vh;
   height: 20vh;
@@ -232,10 +232,40 @@ div#root > div > div.info-div {
 
 }
 
-div#root > div > div.info-div > p {
+div#root > div > form.info-form > p {
   font-size: 1.5rem;
   font-style: italic;
   margin-left: 15%;
+}
+
+div#root > div > form.info-form > input {
+    font-size: 1.5rem;
+    width: 20%;
+    text-wrap: wrap;
+    text-align: center;
+    font-style: italic;
+    margin-left: 15%;
+    
+}
+
+div#root > div > form.info-form > input {
+  background: none;
+  color: white;
+  border: none;
+}
+
+div#root > div > form.info-form > input:focus {
+  background: black;
+  color: white;
+  border: none;
+}
+
+div#root > div > form.info-form > input::placeholder {
+  color: white !important;
+}
+
+div#root > div > form.info-form > button {
+  margin-left: 15%
 }
 
 
@@ -294,7 +324,7 @@ img.wide-view {
   box-shadow: 0 0 5px 800px rgba(199, 199, 199, 0.623);
 }
 
-div.img-info-div {
+div.img-info-form {
   background-color: rgba(58, 56, 53, 0.95);
   width: 40vw;
   height: 20vh;
@@ -312,7 +342,7 @@ div.img-info-div {
   flex-wrap: wrap;
 }
 
-div.img-info-div p {
+div.img-info-form p {
   font-size: 1.2rem;
   opacity: 0.8;
   font-style: italic;
@@ -321,7 +351,7 @@ div.img-info-div p {
   margin-left: 5%;
 }
 
-div.img-info-div p:last-child {
+div.img-info-form p:last-child {
   margin-top: -10%;
 }
 
