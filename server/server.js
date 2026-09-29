@@ -6,6 +6,11 @@ const sqlite3 = require("sqlite3")
 const path = require('path')
 const fs = require('fs')
 
+const bodyParser = require('body-parser')
+
+app.use(bodyParser.urlencoded({ extended: false }));
+
+
 app.use(express.static(path.join(__dirname, "Photos")))
 
 var records = []
@@ -254,6 +259,12 @@ app.post("/set/img/:id/{:country}{/:season}{/:city}{/:weather}{/:tags}", (req, r
         
         res.send("Data set!")
     })
+})
+
+app.post("/upload/", (req, res) => {
+    console.log(
+        req.body
+    )
 })
 
 

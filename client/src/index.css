@@ -135,6 +135,30 @@ h2.time-heading:has(+ img.image-preview) {
   opacity: 1;
 } */
 
+/* Image Add Form */
+
+#img-add-form label {
+  color: white;
+}
+
+#img-add-form {
+    padding: 0.5rem;
+  border: 0.2rem dashed white;
+  background-color: black;
+
+  width: 50vw;
+  height: 40vh;
+
+  position: absolute;
+  z-index: 13;
+
+  margin-left: 20vw;
+  margin-top: 10vh;
+  
+  
+}
+
+
 h2.filtered {
   position: absolute;
   opacity: 0;

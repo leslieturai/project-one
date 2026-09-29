@@ -3,6 +3,7 @@ import YearSlice from "./components/YearSlice/YearSlice";
 import TagList from "./components/TagList/TagList";
 import Settings from "./components/Settings/Settings";
 import Utilities from "./components/Utilities/Utilities";
+import ImgAddForm from "./components/ImgAddForm/ImgAddForm";
 
 function App() {
 
@@ -98,6 +99,16 @@ function App() {
           
           >Utilities</p>
 
+          <p className="header-lesser-text" onClick={() => {
+            if (menuOpen === 4) {
+              setMenu(0)
+              return
+            }
+            setMenu(4)
+          }}
+          
+          >Add Image</p>
+
       </header>
 
       {timeDepth === 1 ? <h2 onClick={() => {
@@ -157,6 +168,10 @@ function App() {
         (
           <></>
         )
+      }
+
+      {
+        menuOpen === 4 ? (<ImgAddForm/>) : (<></>)
       }
 
 
