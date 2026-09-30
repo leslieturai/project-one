@@ -19,27 +19,41 @@ export default function ImgAddForm () {
             console.log(data)
         }) */
 
-        const reader = new FileReader()
+        function convertToBase64 (file, callback) {
+             const reader = new FileReader()
 
-        reader.readAsDataURL(Image)
+            reader.readAsDataURL(file)
 
-        reader.addEventListener("load", () => {
-            const result = reader.result
-            const resultStr = result
-            const base64String =  resultStr?.slice(resultStr.indexOf(',')+1);
+            reader.addEventListener("load", () => {
+                const result = reader.result
+                const resultStr = result
+                const base64String =  resultStr.slice(resultStr.indexOf(',')+1);
+            
+                callback(base64String)
+            })
 
-            fetch("/upload", {
+
+            }
+
+            
+            
+           /*  convertToBase64(Image, (str) => {
+                console.log(str)
+            }) */
+            
+        
+            convertToBase64(Image, (str) => {
+                fetch("/upload/", {
                 method: "POST",
-                body: JSON.stringify(
-                    {imgsrc: base64String}
-                )
+                body: str
             }).then((res) => {
                 res.json()
             }).then((data) => {
                 console.log(data)
             })
-        })
-        
+            })
+
+            
         
         
     }

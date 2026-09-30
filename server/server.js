@@ -8,7 +8,15 @@ const fs = require('fs')
 
 const bodyParser = require('body-parser')
 
-app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
+
+app.use(express.text({
+    type: "*/*",
+    limit: "10mb"
+}));
+
+
 
 
 app.use(express.static(path.join(__dirname, "Photos")))
@@ -261,10 +269,10 @@ app.post("/set/img/:id/{:country}{/:season}{/:city}{/:weather}{/:tags}", (req, r
     })
 })
 
-app.post("/upload/", (req, res) => {
-    console.log(
-        req.body
-    )
+app.post("/upload/", async (req, res) => {
+    const base64 = req.body
+    const buffer = Buffer.from(base64, "base64")
+    fs.writeFileSync("test.jpg", buffer)
 })
 
 
