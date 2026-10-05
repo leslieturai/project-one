@@ -29,17 +29,62 @@ export default function YearSlice (row) {
         const formData = new FormData(form)
 
         const Id = new URLSearchParams(rowData.row[activeIndex].Id).toString()
-        const Country = new URLSearchParams(formData.get("Country")).toString()
+        const Country = formData.get("Country").toString().length == 0 ? new URLSearchParams(rowData.row[activeIndex].Country) : new URLSearchParams(formData.get("Country")).toString()
+        const Season = formData.get("Season").toString().length == 0 ? new URLSearchParams(rowData.row[activeIndex].Season) : new URLSearchParams(formData.get("Season")).toString()
+        const Date = formData.get("Date").toString().length == 0 ? new URLSearchParams(rowData.row[activeIndex].Day + "/" + rowData.row[activeIndex].Month + "/" + rowData.row[activeIndex].Year) : new URLSearchParams(formData.get("Date")).toString()
+
+        const months = [
+            "January", "February", "March", "April",
+            "May", "June", "July", "August",
+            "September", "October", "November", "December"
+        ]
+
+        console.log(
+            Id, Country, Season, Date
+        )
+        
+        /* Date Field Validation */
+        const currentTime = new window.Date()
+
+        Date.split("%2F").forEach((elem, i) => {
+            if (i == 0) {
+                if (Number(elem) <= 0 ||  Number(elem) > 31) {
+                    alert("SUBMISSION ERROR: DAY INCORRECTLY FORMATTED")
+                    return
+                } 
+            }
+            if (i == 1) {
+                if (!months.includes(elem)) {
+                    alert("SUBMISSION ERROR: MONTH INCORRECTLY FORMATTED")
+                    return
+                }
+            }
+            if (i == 2) {
+                if (Number(elem.split("=")[0]) > currentTime.getFullYear() || Number(elem.split("=")[0]) < 1800 ) {
+                    alert("SUBMISSION ERROR: YEAR INCORRECTLY FORMATTED")
+                    return
+                }
+            }
+        })
+
+        console.log("date okay")
+
+        // Add City
+        // Format URL on backend
+        // Send
+
+        
+
 
         //console.log(Id, Country)
         
-        fetch("/set/img/:" + Id + "/:" + Country, {
+        /* fetch("/set/img/:" + Id + "/:" + Country, {
             method: "POST"
         }).then((res) => {
             res.json()
         }).then((data) => {
             console.log(data)
-        })
+        }) */
     }
 
     useEffect(() => {
@@ -55,10 +100,10 @@ export default function YearSlice (row) {
             activeIndex !== null ? (
                 <form className="info-form" onSubmit={handleSubmit}>
                     <p>{rowData.row[activeIndex] ? rowData.row[activeIndex].Name : "N/A"}</p>
-                    <p>{rowData.row[activeIndex] ? rowData.row[activeIndex].Day + "/" + rowData.row[activeIndex].Month + "/" + rowData.row[activeIndex].Year : "N/A"}</p>
+                    <input name="Date" onChange={() => setBool(true)} placeholder={rowData.row[activeIndex] ? rowData.row[activeIndex].Day + "/" + rowData.row[activeIndex].Month + "/" + rowData.row[activeIndex].Year : "N/A"}></input>
                     <input name="Country" onChange={() => setBool(true)}  placeholder={rowData.row[activeIndex] ? rowData.row[activeIndex]?.City + rowData.row[activeIndex]?.Country : "N/A" }></input>
                     {/* <p>{rowData.row[activeIndex] ? rowData.row[activeIndex]?.Weather : "N/A"}</p> */}
-                    <p>{rowData.row[activeIndex] ? rowData.row[activeIndex].Season : "N/A"}</p>
+                    <input name="Season" onChange={() => setBool(true)} placeholder={rowData.row[activeIndex] ? rowData.row[activeIndex].Season : "N/A"}></input>
                     <input name="Id" disabled={true} placeholder={rowData.row[activeIndex] ? "Id: #" + rowData.row[activeIndex].Id : "N/A"}></input>
                     <p>{rowData.row[activeIndex] ? "Tags: " + rowData.row[activeIndex].Tags.toString() : "N/A"}</p>
                     <button disabled={!changedBool} type="submit">Submit Changes</button>
