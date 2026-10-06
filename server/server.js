@@ -257,16 +257,68 @@ app.get("/test/:month/:year", (req, res) => {
 
 /* POST request for updating image fields */
 
-app.post("/set/img/:id/{:country}{/:season}{/:city}{/:weather}{/:tags}", (req, res) => {
-    console.log(req.params.id.split(":")[1].split("=")[0], req.params.country.split(":")[1].split("=")[0])
-    let query = `UPDATE Photos 
+app.post("/set/img/:id/{:country}{/:season}{/:city}{/:weather}{/:date}{/:tags}", (req, res) => {
+    console.log(req.params)
+    let id = req.params.id.split(":")[1].split("=")[0]
+    let country = req.params.country.split(":")[1].split("=")[0].split("+")[1] == undefined ? req.params.country.split(":")[1].split("=")[0] : req.params.country.split(":")[1].split("=")[0].split("+")[1] 
+    let season = req.params.season.split(":")[1].split("=")[0]
+    let city = req.params.city?.split(":")[1].split("=")[0] // Format to process no value
+    let weather = req.params.weather.split(":")[1].split("=")[0]
+    
+    let date = req.params.date.split(":")[1]
+
+    let day = date.split("/")[0]
+    let month = date.split("/")[1]
+    let year = date.split("/")[2].split("=")[0]
+
+
+    let queryWithoutCity = `UPDATE Photos SET ` +
+    `SEASON = ` + JSON.stringify(season) +
+    `COUNTRY = ` + JSON.stringify(country) +
+    `WEATHER = ` + JSON.stringify(weather) +
+    `DAY = ` + JSON.stringify(day) +
+    `MONTH = ` + JSON.stringify(month) +
+    `YEAR = ` + JSON.stringify(year)
+    + `WHERE ID = ` + JSON.stringify(id)
+
+    let queryWithCity = `UPDATE Photos SET ` +
+    `Season = ` + JSON.stringify(season) + "," +
+    `Country = ` + JSON.stringify(country) + "," +
+    `City = ` + JSON.stringify(city) + "," +
+    `Weather = ` + JSON.stringify(weather) + "," +
+    `Day = ` + JSON.stringify(day) + "," +
+    `Month = ` + JSON.stringify(month) + "," +
+    `Year = ` + JSON.stringify(year) 
+    + ` WHERE Id = ` + JSON.stringify(id)
+
+    if (city.length == 0) {
+        console.log("No city")
+        console.log(
+            id, country, season, city, weather,
+            day, month, year
+        )
+        db.run(queryWithoutCity, (err) => {
+        if (err) return console.log(err)
+        
+        res.send("Data set!")
+    })
+    } else {
+        console.log("City present")
+        db.run(queryWithCity, (err) => {
+        if (err) return console.log(err)
+        
+        res.send("Data set!")
+    })
+    }
+    
+/*     let query = `UPDATE Photos 
     SET Country =` + JSON.stringify(req.params.country.split(":")[1].split("=")[0]) + `WHERE Id =` + JSON.stringify(req.params.id.split(":")[1].split("=")[0])
 
     db.run(query, (err) => {
         if (err) return console.log(err)
         
         res.send("Data set!")
-    })
+    }) */
 })
 
 app.post("/upload/", async (req, res) => {
@@ -274,18 +326,6 @@ app.post("/upload/", async (req, res) => {
     const buffer = Buffer.from(base64, "base64")
     fs.writeFileSync("test.jpg", buffer)
 })
-
-
-
-
-/*     
-
-    this.season = season,
-    this.country = country,
-    this.city = city,
-    this.weather = weather
-    this.tags = "" */
-
 
 app.listen(5000, () => {
     console.log("Server started on port 5000!")
