@@ -340,7 +340,7 @@ app.post("/upload/", async (req, res) => {
     /* Get Month for Photo URL */
     let testDate = new Date(JSON.parse(req.body).Date.split("/")[2] + "-" + JSON.parse(req.body).Date.split("/")[1] + "-" + JSON.parse(req.body).Date.split("/")[0])
     let monthURL = months[testDate.getMonth()]
-    /* Reversing submtited date */
+    /* Reversing submtitted date */
     let tempURL = "Photos/" + JSON.parse(req.body).Date.split("/")[2] + "/" + monthURL + "/" + JSON.parse(req.body).Date.split("/")[0]
 
     console.log(tempURL)
@@ -360,7 +360,7 @@ app.post("/upload/", async (req, res) => {
                     VALUES 
                     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 `
-
+        // This is already global; it can be removed here
         function Record (path, year, month, day, name, season, country, city, weather, tags) {
             this.path = path
             this.year = year,

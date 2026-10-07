@@ -43,7 +43,7 @@ export default function YearSlice (row) {
         
         /* Date Field Validation */
         const currentTime = new window.Date()
-
+        /* Simplify and/or import this from a utilities.js (front end variant) */
         if (formData.get("Date").toString().length !== 0) {
             Date.split("%2F").forEach((elem, i) => {
             if (i == 0) {
@@ -65,6 +65,7 @@ export default function YearSlice (row) {
                 }
             }
         })
+        /* Can this be simplified? */
         fetch("/set/img/:" + Id + "/:" + Country + "/:" + Season + "/:" + City + "/:" + Weather + "/:" + Date, {
                 method: "POST"
             }).then((res) => {
@@ -97,7 +98,7 @@ export default function YearSlice (row) {
     if (row.depth === 0) {
         return (
     <>
-        {
+        { /* This should maybe be a component */
             activeIndex !== null ? (
                 <form className="info-form" onSubmit={handleSubmit}>
                     <p>{rowData.row[activeIndex] ? rowData.row[activeIndex].Name : "N/A"}</p>
@@ -116,7 +117,7 @@ export default function YearSlice (row) {
         { 
             rowData.row !== null && rowData.row !== undefined && rowData.row.length !== 0 ? (
                 <h2
-                    onClick={() => {
+                    onClick={() => { /* Isolate this into a function */
                         row.updateDepth(1)                
                         let queryString = new URLSearchParams(rowData.row[0].Year.toString())
                         let fullURL = "/time:" + queryString
@@ -140,7 +141,7 @@ export default function YearSlice (row) {
                         return (
                             <>
                                 <img loading="lazy" width={200} height={200} src={"http://localhost:3000/image:" + imgRow.Id} className="img-preview"
-                                    onClick={(e) => {
+                                    onClick={(e) => { /* Make this a simple function */
                                         handleClassChange(e)
                                         setIndex(i)
                                     }}
@@ -149,7 +150,7 @@ export default function YearSlice (row) {
                                     rowData.row !== null && rowData.row !== undefined && rowData.row.length !== 0 && rowData.row.length - rangeLimit > 0 ? (
                                         <button className="add-img-btn" onClick={() => handleLimit()}>
                                             {"Show more - " + Number(rowData.row.length - rangeLimit) +  " remaining"}
-                                        </button>
+                                        </button> /* Maybe the button could be a component? */
                                     ) : (
                                         <></>
                                     )
@@ -177,7 +178,7 @@ export default function YearSlice (row) {
         { 
             rowData.row !== null && rowData.row !== undefined && rowData.row.length !== 0 ? (
                 <h2
-                    onClick={() => {
+                    onClick={() => { /* Make this a function, if possible */
                         row.updateDepth(2)
                         ///test/:month/:year"                
                         let monthString = new URLSearchParams(rowData.row[0].Month.toString())
