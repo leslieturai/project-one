@@ -17,6 +17,11 @@ app.use(express.text({
 }));
 
 
+app.use(express.json({
+    type: "*/*",
+    limit: "10mb"
+}))
+
 
 
 app.use(express.static(path.join(__dirname, "Photos")))
@@ -322,9 +327,118 @@ app.post("/set/img/:id/{:country}{/:season}{/:city}{/:weather}{/:date}{/:tags}",
 })
 
 app.post("/upload/", async (req, res) => {
-    const base64 = req.body
+    /* const base64 = req.body
     const buffer = Buffer.from(base64, "base64")
-    fs.writeFileSync("test.jpg", buffer)
+    fs.writeFileSync("test.jpg", buffer) */
+
+    const months = [
+            "January", "February", "March", "April",
+            "May", "June", "July", "August",
+            "September", "October", "November", "December"
+        ]
+    
+    /* Get Month for Photo URL */
+    let testDate = new Date(JSON.parse(req.body).Date.split("/")[2] + "-" + JSON.parse(req.body).Date.split("/")[1] + "-" + JSON.parse(req.body).Date.split("/")[0])
+    let monthURL = months[testDate.getMonth()]
+    /* Reversing submtited date */
+    let tempURL = "Photos/" + JSON.parse(req.body).Date.split("/")[2] + "/" + monthURL + "/" + JSON.parse(req.body).Date.split("/")[0]
+
+    console.log(tempURL)
+    
+    /* Check if path exists */
+    if (fs.existsSync(tempURL)) {
+        console.log("Exists, writing")
+        const base64 = JSON.parse(req.body).Image
+        const buffer = Buffer.from(base64, "base64")
+        fs.writeFileSync(tempURL + "/" + "test.jpg", buffer)
+
+        // DB Operations
+        query = 
+                `
+                    INSERT INTO Photos 
+                    (Path, Year, Month, Day, Name, Season, Country, City, Weather, Tags) 
+                    VALUES 
+                    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                `
+
+        function Record (path, year, month, day, name, season, country, city, weather, tags) {
+            this.path = path
+            this.year = year,
+            this.month = month,
+            this.day = day,
+            this.name = name,
+            this.season = season,
+            this.country = country,
+            this.city = city,
+            this.weather = weather
+            this.tags = ""
+            }
+        
+        let tempFile = new Record(
+            tempURL, JSON.parse(req.body).Date.split("/")[2], months[testDate.getMonth()], JSON.parse(req.body).Date.split("/")[0],
+            "test.jpg", JSON.parse(req.body).Season, JSON.parse(req.body).Country, JSON.parse(req.body)?.City, 
+            JSON.parse(req.body).Weather, JSON.parse(req.body).Season
+        )
+
+        db.run(query, Object.values(tempFile), (err) => {
+            if (err) return  console.log(err)
+            console.log("Writing...")
+
+            db.all(`SELECT * FROM PHOTOS WHERE NAME = "test.jpg"`, (err, rows) => {
+                if (err) return console.log(err)
+                console.log("Done!")
+                console.log(rows[0])
+            })
+        })
+
+    } else if (!fs.existsSync(tempURL)) {
+        console.log("Doesn't exist, writing")
+        fs.mkdirSync(tempURL)
+        const base64 = JSON.parse(req.body).Image
+        const buffer = Buffer.from(base64, "base64")
+        fs.writeFileSync(tempURL + "test.jpg", buffer)
+        
+        // DB Operations
+        query = 
+                `
+                    INSERT INTO Photos 
+                    (Path, Year, Month, Day, Name, Season, Country, City, Weather, Tags) 
+                    VALUES 
+                    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                `
+
+        function Record (path, year, month, day, name, season, country, city, weather, tags) {
+            this.path = path
+            this.year = year,
+            this.month = month,
+            this.day = day,
+            this.name = name,
+            this.season = season,
+            this.country = country,
+            this.city = city,
+            this.weather = weather
+            this.tags = ""
+            }
+        
+        let tempFile = new Record(
+            tempURL, JSON.parse(req.body).Date.split("/")[2], months[testDate.getMonth()], JSON.parse(req.body).Date.split("/")[0],
+            "test.jpg", JSON.parse(req.body).Season, JSON.parse(req.body).Country, JSON.parse(req.body)?.City, 
+            JSON.parse(req.body).Weather, JSON.parse(req.body).Season
+        )
+
+        db.run(query, Object.values(tempFile), (err) => {
+            if (err) return  console.log(err)
+            console.log("Writing...")
+
+            db.all(`SELECT * FROM PHOTOS WHERE NAME = "test.jpg"`, (err, rows) => {
+                if (err) return console.log(err)
+                console.log("Done!")
+                console.log(rows[0])
+            })
+        })
+
+    }
+    
 })
 
 app.listen(5000, () => {
