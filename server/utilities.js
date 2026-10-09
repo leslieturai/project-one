@@ -67,3 +67,15 @@
     
 
 */
+
+export function returnSeason (monthArg) {
+    let spring = ["March", "April", "May"]
+    let summer = ["June", "July", "August"]
+    let fall = ["September", "October", "November"]
+    let winter = ["December", "January", "February"]
+
+    if (spring.includes(monthArg)) return "Spring"
+    if (summer.includes(monthArg)) return "Summer"
+    if (fall.includes(monthArg)) return "Fall"
+    if (winter.includes(monthArg)) return "Winter"
+}

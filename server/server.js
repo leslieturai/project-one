@@ -1,3 +1,5 @@
+/* Server Setup & Configuration */
+
 const express = require("express")
 const app = express()
 
@@ -8,7 +10,6 @@ const fs = require('fs')
 
 const bodyParser = require('body-parser')
 
-
 app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 
 app.use(express.text({
@@ -16,18 +17,18 @@ app.use(express.text({
     limit: "10mb"
 }));
 
-
 app.use(express.json({
     type: "*/*",
     limit: "10mb"
 }))
 
-
-
 app.use(express.static(path.join(__dirname, "Photos")))
 
+
+// Variable for dashboard
 var records = []
 
+// Constructor for reading/writing
 function Record (path, year, month, day, name, season, country, city, weather, tags) {
     this.path = path
     this.year = year,
@@ -41,6 +42,7 @@ function Record (path, year, month, day, name, season, country, city, weather, t
     this.tags = ""
 }
 
+// Return season for tags
 function returnSeason (monthArg) {
     let spring = ["March", "April", "May"]
     let summer = ["June", "July", "August"]
@@ -53,8 +55,8 @@ function returnSeason (monthArg) {
     if (winter.includes(monthArg)) return "Winter"
 }
 
-
-
+// Get the date from the directory when creating DB records
+/* Date is derived from organized paths like 2024/December/12 */
 function extractDate (pathStr) {
     return [
         pathStr.split("\\")[1],
@@ -63,104 +65,85 @@ function extractDate (pathStr) {
     ]
 }
 
-
  /* Create Database */
 const db = new sqlite3.Database("./Archive.db", (err) => {
     if (err) return console.log(err)
-
     console.log("Database created!")
 })
 
-
  // Check if Archive.db exists first, returns to avoid constant writing upon refresh
-    if (
-        fs.existsSync("./Archive.db")
-    ) {
-        console.log("DB is present")
-
-    } else {
-        fs.readdir("./Photos", {withFileTypes: true, recursive: true}, (err, files) => {
+if (fs.existsSync("./Archive.db")) {
+    console.log("DB is present")
+} else {
+    fs.readdir("./Photos", {withFileTypes: true, recursive: true}, (err, files) => {
+    // Read photos, create records with dirctories, constructor, and sqLite
+    let tempFile = {}
+    files.forEach((file) => {
+        let tempDate = extractDate(file.parentPath)
+        // Gloss over folders
+        if (tempDate[0] == undefined || tempDate[1] == undefined || tempDate[2] == undefined) {
+            return
+        }
         
-        let tempFile = {}
-        files.forEach((file) => {
-            let tempDate = extractDate(file.parentPath)
-            // Gloss over folders
-            if (tempDate[0] == undefined || tempDate[1] == undefined || tempDate[2] == undefined) {
-                return
-            }
-            
-            tempFile = new Record(
-                file.parentPath,
-                tempDate[0],
-                tempDate[1],
-                tempDate[2],
-                file.name,
-                "Spring",
-                "Netherlands",
-                "",
-                "",
-                ""
-            )
-
-            tempFile.tags = returnSeason(tempFile.month)
-
-
-            records.push(tempFile)
-        })
-
-        db.run(
-            `CREATE TABLE IF NOT EXISTS Photos (
-                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    Path TEXT NOT NULL,
-                    Year TEXT NOT NULL,
-                    Month TEXT NOT NULL,
-                    Day TEXT NOT NULL,
-                    Name TEXT NOT NULL,
-                    Season TEXT,
-                    Country TEXT,
-                    City TEXT,
-                    Weather TEXT,
-                    Tags TEXT
-                )`, (err) => {
-                if (err) return console.log(err)
-                console.log("Table create successfully!")
-                /* Inserting Data */
-                query = 
-                `
-                    INSERT INTO Photos 
-                    (Path, Year, Month, Day, Name, Season, Country, City, Weather, Tags) 
-                    VALUES 
-                    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                `
-
-                for (let i = 0; i < records.length; i++) {
-                    db.run(query, Object.values(records[i]), (err) => {
-                    if (err) return console.log(err)
-
-                    db.all(`SELECT * FROM Photos`, (err, rows) => {
-                        if (err) return console.log(err)
-                        //console.log(rows)
-                        })
-                    })
-                }
-            }
+        tempFile = new Record(
+            file.parentPath,
+            tempDate[0],
+            tempDate[1],
+            tempDate[2],
+            file.name,
+            "Spring",
+            "Netherlands",
+            "",
+            "",
+            ""
         )
-    }) 
-}
 
-app.get("/home", (req, res) => {
-    let row = db.all(`SELECT * FROM Photos LIMIT 1`, (err, rows) => {
-        if (err) return console.log(err)
-            res.json(
-                rows[0]
-            )
-        })
-        console.log("Row: " + row)
-})
+        tempFile.tags = returnSeason(tempFile.month)
+
+        records.push(tempFile)
+    })
+
+    db.run(
+        `CREATE TABLE IF NOT EXISTS Photos (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                Path TEXT NOT NULL,
+                Year TEXT NOT NULL,
+                Month TEXT NOT NULL,
+                Day TEXT NOT NULL,
+                Name TEXT NOT NULL,
+                Season TEXT,
+                Country TEXT,
+                City TEXT,
+                Weather TEXT,
+                Tags TEXT
+            )`, (err) => {
+            if (err) return console.log(err)
+            console.log("Table create successfully!")
+            /* Inserting Data */
+            query = 
+            `
+                INSERT INTO Photos 
+                (Path, Year, Month, Day, Name, Season, Country, City, Weather, Tags) 
+                VALUES 
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `
+
+            for (let i = 0; i < records.length; i++) {
+                db.run(query, Object.values(records[i]), (err) => {
+                if (err) return console.log(err)
+
+                db.all(`SELECT * FROM Photos`, (err, rows) => {
+                    if (err) return console.log(err)
+                    })
+                })
+            }
+        }
+    )
+}) 
+}
 
 /* Dashboard request */
 app.get("/dashboard", (req, res) => {
-    console.log("Getting Dashboard")
     db.all(
     `SELECT DISTINCT YEAR FROM PHOTOS`,
     (err, years) => {
@@ -168,29 +151,22 @@ app.get("/dashboard", (req, res) => {
         // Getting the most shallow elements
       if (err) return console.log(err)
         years.forEach((year) => tempData[0].push(year.Year))      
-            
             let query = `SELECT * FROM PHOTOS WHERE YEAR BETWEEN ` + Math.min(...tempData[0])  + ` AND ` + Math.max(...tempData[0]) +
-            ` GROUP BY Year, Month, Day` 
+            ` GROUP BY Year, Month, Day` // Organized via SQL
             db.all(query, (err, months) => {
                 if (err) return console.log(err)
-                    
                     tempData[tempData.length + 1] = months
-                    
                     res.json(tempData)
                     return
-
             })
         }
     )
 })
 
-
 /* General image request */
 app.get("/image:id", (req, res) => {
-    //console.log("Getting images")
     let row = db.all(`SELECT * FROM Photos WHERE Id = ` + req.params.id.split(":")[1], (err, rows) => {
         if (err) return console.log(err)
-        //console.log(rows[0])
         res.sendFile(path.join((__dirname, "/WebDevProjects/project-one/server/" + rows[0].Path + "/" + rows[0].Name)), (err) => {
             if (err) return console.log(err)
         })
@@ -201,23 +177,18 @@ app.get("/image:id", (req, res) => {
 app.get("/time:year", (req, res) => {
     console.log("Getting monthly view")
     let tempData = [[]]
-    //req.params.year.split(":")[1].split("=")[0]
     db.all(
         `SELECT DISTINCT Month FROM Photos WHERE Year = ` + req.params.year.split(":")[1].split("=")[0], (err, months) => {
             if (err) return console.log(err)
-            //console.log(months)
             months.forEach (month => tempData[0].push(month.Month))
-            //console.log(tempData)
             db.all(
                 `SELECT * FROM Photos WHERE Year = ` + req.params.year.split(":")[1].split("=")[0], (err, days) => {
                     if (err) return console.log(err)
-                    //tempData[tempData.length + 1] = days
                     tempData[0].forEach((tempMonth, i) => {
                         tempData.push(
                             days.filter((e, i) => e.Month === tempMonth)
                         )
                     })
-                    //console.log(tempData)
                     res.json(tempData)
                 }
             )
@@ -227,19 +198,17 @@ app.get("/time:year", (req, res) => {
 
 })
 
-/* Daily view of a monthy */
+/* Daily view of a month */
 app.get("/test/:month/:year", (req, res) => {
     console.log("here at day!")
     console.log(req.params)
     let tempData = [[]]
-    //console.log(req.params.month.split(":")[1].split("=")[0], req.params.year.split(":")[1].split("=")[0])
     db.all(
         `SELECT DISTINCT Day FROM Photos WHERE Month = ` + JSON.stringify(req.params.month.split(":")[1].split("=")[0]) + 
         ` AND Year = ` + JSON.stringify(req.params.year.split(":")[1].split("=")[0]), 
         (err, days) => {
             if (err) return console.log(err)
             days.forEach (day => tempData[0].push(day.Day))
-
             db.all(
                 `SELECT * FROM Photos WHERE Month = ` + JSON.stringify(req.params.month.split(":")[1].split("=")[0]) + 
                 ` AND Year = ` + JSON.stringify(req.params.year.split(":")[1].split("=")[0]), 
@@ -251,7 +220,6 @@ app.get("/test/:month/:year", (req, res) => {
                             rows.filter((e , i) => e.Day === tempDay)
                         )
                     })
-
                     res.json(tempData)
                 }
             )
@@ -261,7 +229,6 @@ app.get("/test/:month/:year", (req, res) => {
 
 
 /* POST request for updating image fields */
-
 app.post("/set/img/:id/{:country}{/:season}{/:city}{/:weather}{/:date}{/:tags}", (req, res) => {
     console.log(req.params)
     let id = req.params.id.split(":")[1].split("=")[0]
@@ -315,22 +282,9 @@ app.post("/set/img/:id/{:country}{/:season}{/:city}{/:weather}{/:date}{/:tags}",
         res.send("Data set!")
     })
     }
-    
-/*     let query = `UPDATE Photos 
-    SET Country =` + JSON.stringify(req.params.country.split(":")[1].split("=")[0]) + `WHERE Id =` + JSON.stringify(req.params.id.split(":")[1].split("=")[0])
-
-    db.run(query, (err) => {
-        if (err) return console.log(err)
-        
-        res.send("Data set!")
-    }) */
 })
 
 app.post("/upload/", async (req, res) => {
-    /* const base64 = req.body
-    const buffer = Buffer.from(base64, "base64")
-    fs.writeFileSync("test.jpg", buffer) */
-
     const months = [
             "January", "February", "March", "April",
             "May", "June", "July", "August",
@@ -342,8 +296,6 @@ app.post("/upload/", async (req, res) => {
     let monthURL = months[testDate.getMonth()]
     /* Reversing submtitted date */
     let tempURL = "Photos/" + JSON.parse(req.body).Date.split("/")[2] + "/" + monthURL + "/" + JSON.parse(req.body).Date.split("/")[0]
-
-    console.log(tempURL)
     
     /* Check if path exists */
     if (fs.existsSync(tempURL)) {
@@ -360,19 +312,6 @@ app.post("/upload/", async (req, res) => {
                     VALUES 
                     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 `
-        // This is already global; it can be removed here
-        function Record (path, year, month, day, name, season, country, city, weather, tags) {
-            this.path = path
-            this.year = year,
-            this.month = month,
-            this.day = day,
-            this.name = name,
-            this.season = season,
-            this.country = country,
-            this.city = city,
-            this.weather = weather
-            this.tags = ""
-            }
         
         let tempFile = new Record(
             tempURL, JSON.parse(req.body).Date.split("/")[2], months[testDate.getMonth()], JSON.parse(req.body).Date.split("/")[0],
@@ -406,19 +345,6 @@ app.post("/upload/", async (req, res) => {
                     VALUES 
                     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 `
-
-        function Record (path, year, month, day, name, season, country, city, weather, tags) {
-            this.path = path
-            this.year = year,
-            this.month = month,
-            this.day = day,
-            this.name = name,
-            this.season = season,
-            this.country = country,
-            this.city = city,
-            this.weather = weather
-            this.tags = ""
-            }
         
         let tempFile = new Record(
             tempURL, JSON.parse(req.body).Date.split("/")[2], months[testDate.getMonth()], JSON.parse(req.body).Date.split("/")[0],
@@ -436,9 +362,7 @@ app.post("/upload/", async (req, res) => {
                 console.log(rows[0])
             })
         })
-
     }
-    
 })
 
 app.listen(5000, () => {
