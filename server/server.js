@@ -1,13 +1,9 @@
 /* Server Setup & Configuration */
-
 const express = require("express")
 const app = express()
-
 const sqlite3 = require("sqlite3")
-
 const path = require('path')
 const fs = require('fs')
-
 const bodyParser = require('body-parser')
 
 app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
@@ -23,7 +19,6 @@ app.use(express.json({
 }))
 
 app.use(express.static(path.join(__dirname, "Photos")))
-
 
 // Variable for dashboard
 var records = []
@@ -53,6 +48,14 @@ function returnSeason (monthArg) {
     if (summer.includes(monthArg)) return "Summer"
     if (fall.includes(monthArg)) return "Fall"
     if (winter.includes(monthArg)) return "Winter"
+}
+
+/* Return commonly used formatted URL params */
+function returnParamStr (strArg) {
+    if (strArg === null || strArg === undefined) {
+        return ""
+    }
+    return strArg.split(":")[1].split("=")[0]
 }
 
 // Get the date from the directory when creating DB records
@@ -178,11 +181,11 @@ app.get("/time:year", (req, res) => {
     console.log("Getting monthly view")
     let tempData = [[]]
     db.all(
-        `SELECT DISTINCT Month FROM Photos WHERE Year = ` + req.params.year.split(":")[1].split("=")[0], (err, months) => {
+        `SELECT DISTINCT Month FROM Photos WHERE Year = ` + returnParamStr(req.params.year), (err, months) => {
             if (err) return console.log(err)
             months.forEach (month => tempData[0].push(month.Month))
             db.all(
-                `SELECT * FROM Photos WHERE Year = ` + req.params.year.split(":")[1].split("=")[0], (err, days) => {
+                `SELECT * FROM Photos WHERE Year = ` + returnParamStr(req.params.year), (err, days) => {
                     if (err) return console.log(err)
                     tempData[0].forEach((tempMonth, i) => {
                         tempData.push(
@@ -195,7 +198,6 @@ app.get("/time:year", (req, res) => {
 
         }
     )
-
 })
 
 /* Daily view of a month */
@@ -204,14 +206,14 @@ app.get("/test/:month/:year", (req, res) => {
     console.log(req.params)
     let tempData = [[]]
     db.all(
-        `SELECT DISTINCT Day FROM Photos WHERE Month = ` + JSON.stringify(req.params.month.split(":")[1].split("=")[0]) + 
-        ` AND Year = ` + JSON.stringify(req.params.year.split(":")[1].split("=")[0]), 
+        `SELECT DISTINCT Day FROM Photos WHERE Month = ` + JSON.stringify(returnParamStr(req.params.month)) + 
+        ` AND Year = ` + JSON.stringify(returnParamStr(req.params.year)), 
         (err, days) => {
             if (err) return console.log(err)
             days.forEach (day => tempData[0].push(day.Day))
             db.all(
-                `SELECT * FROM Photos WHERE Month = ` + JSON.stringify(req.params.month.split(":")[1].split("=")[0]) + 
-                ` AND Year = ` + JSON.stringify(req.params.year.split(":")[1].split("=")[0]), 
+                `SELECT * FROM Photos WHERE Month = ` + JSON.stringify(returnParamStr(req.params.month)) + 
+                ` AND Year = ` + JSON.stringify(returnParamStr(req.params.year)), 
                 (err, rows) => {
                     if (err) return console.log(err)
 
@@ -231,11 +233,11 @@ app.get("/test/:month/:year", (req, res) => {
 /* POST request for updating image fields */
 app.post("/set/img/:id/{:country}{/:season}{/:city}{/:weather}{/:date}{/:tags}", (req, res) => {
     console.log(req.params)
-    let id = req.params.id.split(":")[1].split("=")[0]
-    let country = req.params.country.split(":")[1].split("=")[0].split("+")[1] == undefined ? req.params.country.split(":")[1].split("=")[0] : req.params.country.split(":")[1].split("=")[0].split("+")[1] 
-    let season = req.params.season.split(":")[1].split("=")[0]
-    let city = req.params.city?.split(":")[1].split("=")[0] // Format to process no value
-    let weather = req.params.weather.split(":")[1].split("=")[0]
+    let id = returnParamStr(req.params.id)
+    let country = returnParamStr(req.params.country).split("+")[1] == undefined ? returnParamStr(req.params.country) : returnParamStr(req.params.country).split("+")[1] 
+    let season = returnParamStr(req.params.season)
+    let city = returnParamStr(req.params?.city) // Format to process no value
+    let weather = returnParamStr(req.params.weather)
     
     let date = req.params.date.split(":")[1]
 
