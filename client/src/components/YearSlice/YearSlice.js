@@ -180,10 +180,9 @@ export default function YearSlice (row) {
                 <h2
                     onClick={() => { /* Make this a function, if possible */
                         row.updateDepth(2)
-                        ///test/:month/:year"                
                         let monthString = new URLSearchParams(rowData.row[0].Month.toString())
                         let yearString = new URLSearchParams(rowData.row[0].Year.toString())
-                        let fullURL = "/test/:" + monthString + "/:" + yearString
+                        let fullURL = "/monthly/:" + monthString + "/:" + yearString
                         fetch(fullURL).then(
                             (res) => res.json()
                         ).then((data) => {
@@ -236,10 +235,9 @@ export default function YearSlice (row) {
                 <h2
                     onClick={() => {
                         row.updateDepth(1)
-                        ///test/:month/:year"                
                         let monthString = new URLSearchParams(rowData.row[0].Month.toString())
                         let yearString = new URLSearchParams(rowData.row[0].Year.toString())
-                        let fullURL = "/test/:" + monthString + "/:" + yearString
+                        let fullURL = "/monthly/:" + monthString + "/:" + yearString
                         fetch(fullURL).then(
                             (res) => res.json()
                         ).then((data) => {

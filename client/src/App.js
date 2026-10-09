@@ -54,6 +54,8 @@ function App() {
           let tempData = []
           tempData[0] = data[0]
 
+          
+
           data[0].forEach((timeFrame, i) => {
             tempData.push(
               data[2].filter((row) => row.Year == timeFrame)
