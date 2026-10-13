@@ -94,8 +94,7 @@ export default function YearSlice (row) {
         //console.log(row)
     }, [row])
 
-
-    if (row.depth === 0) {
+    if (row.depth === 0 ||  row.depth === 1 || row.depth === 2) {
         return (
     <>
         { /* This should maybe be a component */
@@ -118,16 +117,33 @@ export default function YearSlice (row) {
             rowData.row !== null && rowData.row !== undefined && rowData.row.length !== 0 ? (
                 <h2
                     onClick={() => { /* Isolate this into a function */
-                        row.updateDepth(1)                
-                        let queryString = new URLSearchParams(rowData.row[0].Year.toString())
-                        let fullURL = "/time:" + queryString
+                        let fullURL;
+                         if (row.depth === 0) {
+                            row.updateDepth(1)
+                            let queryString = new URLSearchParams(rowData.row[0].Year.toString())
+                            fullURL = "/time:" + queryString
+                        } else if (row.depth === 1) {
+                            row.updateDepth(2)
+                            let monthString = new URLSearchParams(rowData.row[0].Month.toString())
+                            let yearString = new URLSearchParams(rowData.row[0].Year.toString())
+                            fullURL = "/monthly/:" + monthString + "/:" + yearString
+                        }         
+                        
                         fetch(fullURL).then(
                             (res) => res.json()
                         ).then((data) => {
                             row.updateFunc(data)
                         })
                     }}
-                >{ rowData.row[0].Year }</h2>
+                >{(() => {
+                    if (row.depth === 0) {
+                        return rowData.row[0].Year
+                    } else if (row.depth === 1) {
+                        return rowData.row[0].Month
+                    } else if (row.depth === 2) {
+                        return rowData.row[0].Day
+                    }
+                })()}</h2>
             ) : (
                 <p>Loading...</p>
             )
@@ -172,122 +188,7 @@ export default function YearSlice (row) {
         </section>
     </>
     )
-    } else if (row.depth === 1) {
-        return (
-    <>
-        { 
-            rowData.row !== null && rowData.row !== undefined && rowData.row.length !== 0 ? (
-                <h2
-                    onClick={() => { /* Make this a function, if possible */
-                        row.updateDepth(2)
-                        let monthString = new URLSearchParams(rowData.row[0].Month.toString())
-                        let yearString = new URLSearchParams(rowData.row[0].Year.toString())
-                        let fullURL = "/monthly/:" + monthString + "/:" + yearString
-                        fetch(fullURL).then(
-                            (res) => res.json()
-                        ).then((data) => {
-                            row.updateFunc(data)
-                        })
-                    }}
-                >{ rowData.row[0].Month }</h2>
-            ) : (
-                <p>Loading...</p>
-            )
-        }
-        
-       <section className="img-section">
-        {
-            rowData.row !== null && rowData.row !== undefined ? (
-                rowData.row.slice(0, rangeLimit).map((imgRow, i) => {
-                    if (i === Number(rowData.row.slice(0, rangeLimit).length - 1)) {
-                        return (
-                            <>
-                                <img loading="lazy" width={200} height={200} src={"http://localhost:3000/image:" + imgRow.Id} className="img-preview"></img>
-                                {
-                                    rowData.row !== null && rowData.row !== undefined && rowData.row.length !== 0 && rowData.row.length - rangeLimit > 0 ? (
-                                        <button className="add-img-btn" onClick={() => handleLimit()}>
-                                            {"Show more - " + Number(rowData.row.length - rangeLimit) +  " remaining"}
-                                        </button>
-                                    ) : (
-                                        <></>
-                                    )
-                                }      
-                            </>
-                    )
-                } else {
-                     return (
-                        <>
-                            <img loading="lazy" width={200} height={200} src={"http://localhost:3000/image:" + imgRow.Id} className="img-preview"></img>
-                        </>
-                    )
-                }
-                })
-                ) : (<p>{JSON.stringify(row)}</p>)
-            }
-        </section>
-    </>
-    )
-    } else if (row.depth === 2) {
-                return (
-    <>
-        { 
-            rowData.row !== null && rowData.row !== undefined && rowData.row.length !== 0 ? (
-                <h2
-                    onClick={() => {
-                        row.updateDepth(1)
-                        let monthString = new URLSearchParams(rowData.row[0].Month.toString())
-                        let yearString = new URLSearchParams(rowData.row[0].Year.toString())
-                        let fullURL = "/monthly/:" + monthString + "/:" + yearString
-                        fetch(fullURL).then(
-                            (res) => res.json()
-                        ).then((data) => {
-                            row.updateFunc(data)
-                        })
-                    }}
-                >{ rowData.row[0].Day }</h2>
-            ) : (
-                <p>Loading...</p>
-            )
-        }
-        
-       <section className="img-section">
-        {
-            rowData.row !== null && rowData.row !== undefined ? (
-                rowData.row.slice(0, rangeLimit).map((imgRow, i) => {
-                    if (i === Number(rowData.row.slice(0, rangeLimit).length - 1)) {
-                        return (
-                            <>
-                                <img loading="lazy" width={200} height={200} src={"http://localhost:3000/image:" + imgRow.Id} className="img-preview"></img>
-                                {
-                                    rowData.row !== null && rowData.row !== undefined && rowData.row.length !== 0 && rowData.row.length - rangeLimit > 0 ? (
-                                        <button className="add-img-btn" onClick={() => handleLimit()}>
-                                            {"Show more - " + Number(rowData.row.length - rangeLimit) +  " remaining"}
-                                        </button>
-                                    ) : (
-                                        <></>
-                                    )
-                                }      
-                            </>
-                    )
-                } else {
-                     return (
-                        <>
-                            <img loading="lazy" width={200} height={200} src={"http://localhost:3000/image:" + imgRow.Id} className="img-preview"></img>
-                        </>
-                    )
-                }
-                })
-                ) : (<p>{JSON.stringify(row)}</p>)
-            }
-        </section>
-    </>
-    )
-    } else {
-        console.log(rowData)
-        return (
-            <h2>error</h2>
-        )
-    }
+    } 
 
     
 }
