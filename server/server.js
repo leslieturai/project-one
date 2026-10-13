@@ -68,7 +68,13 @@ function extractDate (pathStr) {
     ]
 }
 
- /* Create Database */
+const getRandomInteger = (min, max) => {
+  min = Math.ceil(min)
+  max = Math.floor(max)
+
+  return Math.floor(Math.random() * (max - min)) + min
+}
+/* Create Database */
 const db = new sqlite3.Database("./Archive.db", (err) => {
     if (err) return console.log(err)
     console.log("Database created!")
@@ -295,12 +301,14 @@ app.post("/upload/", async (req, res) => {
     let monthURL = months[tempDate.getMonth()]
     /* Reversing submtitted date */
     let tempURL = "Photos/" + JSON.parse(req.body).Date.split("/")[2] + "/" + monthURL + "/" + JSON.parse(req.body).Date.split("/")[0]
+    
+    let tempName = JSON.parse(req.body).Country + "-" + String(getRandomInteger(0, 100000)) + ".jpg"
 
     let tempFile = new Record(
             tempURL, JSON.parse(req.body).Date.split("/")[2], 
             months[tempDate.getMonth()], 
             JSON.parse(req.body).Date.split("/")[0],
-            "test.jpg", 
+            JSON.parse(JSON.stringify(tempName)), 
             JSON.parse(req.body).Season, 
             JSON.parse(req.body).Country, 
             JSON.parse(req.body)?.City, 
@@ -321,11 +329,11 @@ app.post("/upload/", async (req, res) => {
 
     /* Check if path exists */
     if (fs.existsSync(tempURL)) {
-        fs.writeFileSync(tempURL + "/" + "test.jpg", buffer)
+        fs.writeFileSync(tempURL + "/" + tempName, buffer)
 
         db.run(query, Object.values(tempFile), (err) => {
             if (err) return  console.log(err)
-            db.all(`SELECT * FROM PHOTOS WHERE NAME = "test.jpg"`, (err, rows) => {
+            db.all(`SELECT * FROM PHOTOS WHERE NAME = ` + JSON.stringify(tempName), (err, rows) => {
                 if (err) return console.log(err)
                 console.log("Done!")
                 console.log(rows[0])
@@ -333,13 +341,15 @@ app.post("/upload/", async (req, res) => {
         })
 
     } else if (!fs.existsSync(tempURL)) {
-        fs.mkdirSync(tempURL)
-        fs.writeFileSync(tempURL + "test.jpg", buffer)
+        fs.mkdirSync(tempURL, {recursive: true})
+        fs.writeFileSync(tempURL + "/" + tempName, buffer)
+
+
         
         db.run(query, Object.values(tempFile), (err) => {
             if (err) return  console.log(err)
 
-            db.all(`SELECT * FROM PHOTOS WHERE NAME = "test.jpg"`, (err, rows) => {
+            db.all(`SELECT * FROM PHOTOS WHERE NAME = ` + JSON.stringify(tempName), (err, rows) => {
                 if (err) return console.log(err)
                 console.log("Done!")
                 console.log(rows[0])
