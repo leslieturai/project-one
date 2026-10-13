@@ -145,7 +145,7 @@ export default function YearSlice (row) {
                     }
                 })()}</h2>
             ) : (
-                <p>Loading...</p>
+                <></>
             )
         }
         

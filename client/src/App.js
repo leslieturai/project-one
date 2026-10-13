@@ -178,9 +178,9 @@ function App() {
 
 
       {
-        photoData !== null && photoData !== undefined && Array.isArray(photoData) ? (
+        photoData !== null && photoData !== undefined && photoData.length !==0  && Array.isArray(photoData) ? (
           photoData.slice(1, photoData.length).map((data, i) => {
-              if (filters) {
+              if (filters && data !== undefined && data !== null && Array.isArray(data)) {
                 
                 //console.log(data.filter(r => filters.includes(r.Tags)))
                 return (
@@ -203,7 +203,7 @@ function App() {
                 )
               }
           })
-        ) : (<p>Loading...</p>)
+        ) : (<></>)
       }
       
 
