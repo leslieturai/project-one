@@ -82,6 +82,7 @@ function App() {
             }
             setMenu(1)
           }} >Tag list</p>
+          
           <p className="header-lesser-text" onClick={() => {
             if (menuOpen === 2) {
               setMenu(0)
@@ -90,23 +91,14 @@ function App() {
             setMenu(2)
           }}
           
-          >Settings</p>
+          >Utilities</p>
+
           <p className="header-lesser-text" onClick={() => {
             if (menuOpen === 3) {
               setMenu(0)
               return
             }
             setMenu(3)
-          }}
-          
-          >Utilities</p>
-
-          <p className="header-lesser-text" onClick={() => {
-            if (menuOpen === 4) {
-              setMenu(0)
-              return
-            }
-            setMenu(4)
           }}
           
           >Add Image</p>
@@ -156,7 +148,7 @@ function App() {
 
             {
         menuOpen === 2 ? (
-          <Settings/>
+          <Utilities/>
         ) :
         (
           <></>
@@ -165,15 +157,11 @@ function App() {
 
             {
         menuOpen === 3 ? (
-          <Utilities/>
+          <ImgAddForm/>
         ) :
         (
           <></>
         )
-      }
-
-      {
-        menuOpen === 4 ? (<ImgAddForm/>) : (<></>)
       }
 
 
