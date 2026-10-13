@@ -98,7 +98,7 @@ export default function YearSlice (row) {
         return (
     <>
         { /* This should maybe be a component */
-            activeIndex !== null ? (
+            activeIndex !== null && (
                 <form className="info-form" onSubmit={handleSubmit}>
                     <p>{rowData.row[activeIndex] ? rowData.row[activeIndex].Name : "N/A"}</p>
                     <input name="Date" onChange={() => setBool(true)} placeholder={rowData.row[activeIndex] ? rowData.row[activeIndex].Day + "/" + rowData.row[activeIndex].Month + "/" + rowData.row[activeIndex].Year : "N/A"}></input>
@@ -110,7 +110,7 @@ export default function YearSlice (row) {
                     <p>{rowData.row[activeIndex] ? "Tags: " + rowData.row[activeIndex].Tags.toString() : "N/A"}</p>
                     <button disabled={!changedBool} type="submit">Submit Changes</button>
                 </form>
-            ) : (<></>)
+            )
         }
 
         { 
@@ -158,8 +158,9 @@ export default function YearSlice (row) {
                             <>
                                 <img loading="lazy" width={200} height={200} src={"http://localhost:3000/image:" + imgRow.Id} className="img-preview"
                                     onClick={(e) => { /* Make this a simple function */
-                                        handleClassChange(e)
                                         setIndex(i)
+                                        handleClassChange(e)
+                                        
                                     }}
                                 ></img>
                                 {
@@ -177,8 +178,9 @@ export default function YearSlice (row) {
                      return (
                         <>
                             <img loading="lazy" width={200} height={200} src={"http://localhost:3000/image:" + imgRow.Id} className="img-preview" onClick={(e) => {
-                                setIndex(i)
-                                handleClassChange(e)}}></img>
+                                 setIndex(i)
+                                 handleClassChange(e)
+                                }}></img>
                         </>
                     )
                 }
