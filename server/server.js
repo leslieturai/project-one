@@ -184,7 +184,6 @@ app.get("/image:id", (req, res) => {
 
 /* Monthly view in a year */
 app.get("/time:year", (req, res) => {
-    console.log("Getting monthly view")
     let tempData = [[]]
     db.all(
         `SELECT DISTINCT Month FROM Photos WHERE Year = ` + returnParamStr(req.params.year), (err, months) => {
@@ -208,8 +207,6 @@ app.get("/time:year", (req, res) => {
 
 /* Daily view of a month */
 app.get("/monthly/:month/:year", (req, res) => {
-    console.log("here at day!")
-    console.log(req.params)
     let tempData = [[]]
     db.all(
         `SELECT DISTINCT Day FROM Photos WHERE Month = ` + JSON.stringify(returnParamStr(req.params.month)) + 
@@ -270,17 +267,12 @@ app.post("/set/img/:id/{:country}{/:season}{/:city}{/:weather}{/:date}{/:tags}",
     + ` WHERE Id = ` + JSON.stringify(id)
 
     if (city.length == 0) {
-        console.log(
-            id, country, season, city, weather,
-            day, month, year
-        )
         db.run(queryWithoutCity, (err) => {
         if (err) return console.log(err)
         
         res.send("Data set!")
     })
     } else {
-        console.log("City present")
         db.run(queryWithCity, (err) => {
         if (err) return console.log(err)
         
