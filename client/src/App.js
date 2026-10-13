@@ -50,19 +50,14 @@ function App() {
           fetch("/dashboard").then(
           (res) => res.json()
         ).then((data) => {
-          //setData(data)
           let tempData = []
           tempData[0] = data[0]
-
-          
 
           data[0].forEach((timeFrame, i) => {
             tempData.push(
               data[2].filter((row) => row.Year == timeFrame)
             )
           })
-
-          //console.log(tempData)
 
           setData(tempData)
         })
@@ -74,7 +69,9 @@ function App() {
     <div>
       {/* Header */}
       <header>
-          <h1 >Archive</h1>
+          <h1 onClick={() => {
+            setDepth(0)
+          }} >Archive</h1>
           <p className="header-lesser-text" onClick={() => {
             if (menuOpen === 1) {
               setMenu(0)
@@ -133,7 +130,7 @@ function App() {
       {/* Main render for gallery  */}
       {
         filters !== null && filters !== undefined && filters !== undefined ? 
-        <p className="filter-text">Results for: {filters[0]}</p>
+        <p className="filter-text">Results for: {String(filters).replaceAll(",", ", ")}</p>
         : 
         <></>
       }

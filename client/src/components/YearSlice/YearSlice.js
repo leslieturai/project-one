@@ -102,7 +102,7 @@ export default function YearSlice (row) {
                 <form className="info-form" onSubmit={handleSubmit}>
                     <p>{rowData.row[activeIndex] ? rowData.row[activeIndex].Name : "N/A"}</p>
                     <input name="Date" onChange={() => setBool(true)} placeholder={rowData.row[activeIndex] ? rowData.row[activeIndex].Day + "/" + rowData.row[activeIndex].Month + "/" + rowData.row[activeIndex].Year : "N/A"}></input>
-                    <input name="Country" onChange={() => setBool(true)}  placeholder={rowData.row[activeIndex] ? rowData.row[activeIndex]?.City + " " + rowData.row[activeIndex]?.Country : "N/A" }></input>
+                    <input name="Country" onChange={() => setBool(true)}  placeholder={rowData.row[activeIndex] ? rowData.row[activeIndex]?.City + " - " + rowData.row[activeIndex]?.Country : "N/A" }></input>
                     <input name="Season" onChange={() => setBool(true)} placeholder={rowData.row[activeIndex] ? rowData.row[activeIndex].Season : "N/A"}></input>
                     <input name="Weather" onChange={() => setBool(true)}  placeholder={rowData.row[activeIndex].Weather !== "" ? rowData.row[activeIndex].Weather : "N/A"}/>
                     <input name="Id" disabled={true} placeholder={rowData.row[activeIndex] ? "Id: #" + rowData.row[activeIndex].Id : "N/A"}></input>
