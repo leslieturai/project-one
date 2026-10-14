@@ -74,18 +74,16 @@ export default function YearSlice (row) {
                 console.log(data)
             }) 
         } else {
-            // Send
-            
-            //console.log(Id, Country)
-            // "/set/img/:id/{:country}{/:season}{/:city}{/:weather}{/:date}{/:tags}",
-            
             fetch("/set/img/:" + Id + "/:" + Country + "/:" + Season + "/:" + City + "/:" + Weather + "/:" + Date, {
                 method: "POST"
             }).then((res) => {
-                res.json()
-            }).then((data) => {
-                console.log(data)
-            }) 
+                if (res.statusText === "OK") {
+                    alert("Propery Edit Successful!")
+                    
+                } else {
+                    alert("Server Error: propery edit failed!")
+                }
+            })
         }
     }
 

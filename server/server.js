@@ -269,14 +269,12 @@ app.post("/set/img/:id/{:country}{/:season}{/:city}{/:weather}{/:date}{/:tags}",
     if (city.length == 0) {
         db.run(queryWithoutCity, (err) => {
         if (err) return console.log(err)
-        
-        res.send("Data set!")
+        res.json({status: "OK"})
     })
     } else {
         db.run(queryWithCity, (err) => {
         if (err) return console.log(err)
-        
-        res.send("Data set!")
+        res.json({status: "OK"})
     })
     }
 })
@@ -322,29 +320,25 @@ app.post("/upload/", async (req, res) => {
     /* Check if path exists */
     if (fs.existsSync(tempURL)) {
         fs.writeFileSync(tempURL + "/" + tempName, buffer)
-
+        res.json({status: "OK"})    
         db.run(query, Object.values(tempFile), (err) => {
             if (err) return  console.log(err)
             db.all(`SELECT * FROM PHOTOS WHERE NAME = ` + JSON.stringify(tempName), (err, rows) => {
                 if (err) return console.log(err)
-                console.log("Done!")
-                console.log(rows[0])
+                
             })
         })
 
     } else if (!fs.existsSync(tempURL)) {
         fs.mkdirSync(tempURL, {recursive: true})
         fs.writeFileSync(tempURL + "/" + tempName, buffer)
-
-
-        
+        res.json({status: "OK"})
         db.run(query, Object.values(tempFile), (err) => {
             if (err) return  console.log(err)
 
             db.all(`SELECT * FROM PHOTOS WHERE NAME = ` + JSON.stringify(tempName), (err, rows) => {
                 if (err) return console.log(err)
-                console.log("Done!")
-                console.log(rows[0])
+                
             })
         })
     }

@@ -58,10 +58,7 @@ function App() {
               data[2].filter((row) => Number(row.Year) == timeFrame)
             )
           })
-
           
-
-
           setData(
             tempData
           )

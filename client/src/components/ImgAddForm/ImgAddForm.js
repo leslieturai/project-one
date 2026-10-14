@@ -18,15 +18,12 @@ export default function ImgAddForm () {
 
         const currentTime = new window.Date()
 
-        console.log(tempDate.length)
-
         if (tempDate === null || tempDate === undefined || tempDate === "" || tempDate.length === 0) {
             alert("ERROR: DATE NOT PROVIDED")
             return
         }
 
         if (formData.get("Date").toString().length !== 0) {
-            console.log("Checking date")
             tempDate.split("/").forEach((elem, i) => {
             if (i == 0) {
                 if (Number(elem) <= 0 ||  Number(elem) > 31) {
@@ -49,7 +46,6 @@ export default function ImgAddForm () {
         })
         }
 
-        console.log("Date okay")
         const Date = tempDate
 
         function convertToBase64 (file, callback) {
@@ -84,9 +80,11 @@ export default function ImgAddForm () {
                 }
             )
         }).then((res) => {
-            res.json()
-        }).then((data) => {
-            console.log(data)
+            if (res.statusText === "OK") {
+                alert("Image Submitted Successfully!")
+            } else {
+                alert("Error: server submission error!")
+            }
         })
         })
     }
@@ -96,7 +94,7 @@ export default function ImgAddForm () {
         encType="multipart/form-data">
             <input required={true} name="Date" placeholder="Date (DD/MM/YYYY)" type="text"/>
             <input required={true} name="Country" placeholder="Country" type="text"/>
-            <input required={true} name="City" placeholder="City" type="text"/>
+            <input name="City" placeholder="City" type="text"/>
             <input required={true} name="Weather" placeholder="Weather" type="text"/>
             <input required={true} name="Season" placeholder="Season" type="text"/>
             <input required={true} name="Image" placeholder="Select image" type="file"/>
