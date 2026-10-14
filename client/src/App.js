@@ -51,15 +51,20 @@ function App() {
           (res) => res.json()
         ).then((data) => {
           let tempData = []
-          tempData[0] = data[0]
+          tempData[0] = data[0].sort((a, b) => {return Number(a) - Number(b)})
 
           data[0].forEach((timeFrame, i) => {
             tempData.push(
-              data[2].filter((row) => row.Year == timeFrame)
+              data[2].filter((row) => Number(row.Year) == timeFrame)
             )
           })
 
-          setData(tempData)
+          
+
+
+          setData(
+            tempData
+          )
         })
         } 
   }, [timeDepth])
