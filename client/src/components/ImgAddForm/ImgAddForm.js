@@ -16,12 +16,6 @@ export default function ImgAddForm () {
 
         const Image = formData.get("Image")
 
-        const months = [
-            "January", "February", "March", "April",
-            "May", "June", "July", "August",
-            "September", "October", "November", "December"
-        ]
-
         const currentTime = new window.Date()
 
         console.log(tempDate.length)
@@ -95,21 +89,17 @@ export default function ImgAddForm () {
             console.log(data)
         })
         })
-
-            
-        
-        
     }
 
     return (
         <form id="img-add-form" onSubmit={handleSubmit}
         encType="multipart/form-data">
-            <input  name="Date" placeholder="Date (DD/MM/YYYY)" type="text"/>
-            <input name="Country" placeholder="Country" type="text"/>
-            <input name="City" placeholder="City" type="text"/>
-            <input name="Weather" placeholder="Weather" type="text"/>
-            <input  name="Season" placeholder="Season" type="text"/>
-            <input  name="Image" placeholder="Select image" type="file"/>
+            <input required={true} name="Date" placeholder="Date (DD/MM/YYYY)" type="text"/>
+            <input required={true} name="Country" placeholder="Country" type="text"/>
+            <input required={true} name="City" placeholder="City" type="text"/>
+            <input required={true} name="Weather" placeholder="Weather" type="text"/>
+            <input required={true} name="Season" placeholder="Season" type="text"/>
+            <input required={true} name="Image" placeholder="Select image" type="file"/>
             <button type="submit">Submit</button>
         </form>
     )
