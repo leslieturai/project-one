@@ -88,9 +88,44 @@ header > .header-lesser-text:hover {
 
 /* Image Add Form */
 
-#img-add-form label {
-  color: white;
+#img-add-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  flex-grow: 0;
 }
+
+
+#img-add-form input, #img-add-form button {
+  width: 45%;
+}
+
+#img-add-form input {
+  font-size: 1.2rem;
+  padding: 0.55rem;
+}
+
+#img-add-form button {
+  font-size: 1.5rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  transition: all;
+  transition-duration: 0.2s;
+  text-wrap: nowrap;
+  background-color: black;
+  color: white;
+  border: 0.25rem solid rgb(58, 57, 57);
+
+  margin-top: 2%;
+}
+
+#img-add-form button:hover {
+  border: 0.25rem solid white;
+}
+
+/* Main Styles */
 
 div#root > div > img {
   margin: 0.5% 0.5% 0.5% 0.5%;
@@ -122,7 +157,7 @@ div#root > div > section > img.fullscreen {
 div#root > div > form.info-form {
   background-color: black;
   width: 50vh;
-  height: 20vh;
+  height: 30vh;
 
   z-index: 10;
   position: fixed;
@@ -132,7 +167,8 @@ div#root > div > form.info-form {
 
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
 
   pointer-events: all;
@@ -143,16 +179,22 @@ div#root > div > form.info-form {
 div#root > div > form.info-form > p, div#root > div > form.info-form > input {
   font-size: 1.5rem;
   font-style: italic;
-  margin-left: 15%;
+  margin-left: 5%;
 
 }
 
 div#root > div > form.info-form > input {
   font-size: 1.5rem;
-  width: 25%;   
+  width: 35%;   
 
   background: none;
   color: white;
+  padding: 0.5rem;
+  border-radius: 1rem;
+  border: 0.1rem solid white;
+}
+
+div#root > div > form.info-form > input:nth-child(6) {
   border: none;
 }
 
@@ -167,14 +209,15 @@ div#root > div > form.info-form > input::placeholder {
 }
 
 div#root > div > form.info-form > button {
-  margin-left: 21%;
   width: 25%;
   border-radius: 1rem;
   color: white;
   border: 0.1rem solid white;
+  font-size: 1.5rem;
   background-color: black;
   transition: all;
   transition-duration: 0.2s;
+  margin-left: 15%;
 }
 
 div#root > div > form.info-form > button:hover {
